@@ -5,7 +5,7 @@
 //!
 //! ## Basic Usage
 //!
-//! ```rust,ignore
+//! ```rust
 //! use safe_math_rs::safe_math;
 //!
 //! #[safe_math]
@@ -77,7 +77,9 @@ impl_safe_math_int!(
     u8, u16, u32, u64, u128, i8, i16, i32, i64, i128, usize, isize
 );
 
-/// Implement `SafeMathOps` for floating-point types without overflow checks
+/// Implement `SafeMathOps` for floating-point types without overflow checks.
+/// This is a workaround to allow safe-math in functions that mix signed/unsigned and floating-point numbers.
+/// In the future, additional checks (e.g., not NaN, not Inf) could be added, but for now we simply map 1:1 to checked operations.
 macro_rules! impl_safe_math_float {
     ($($t:ty),*) => {
         $(
