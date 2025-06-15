@@ -1,7 +1,7 @@
 use proptest::prelude::*;
 
 mod common;
-use common::{test_add_macro, test_div_macro, test_mul_macro, test_sub_macro, Expression};
+use common::{Expression, test_add_macro, test_div_macro, test_mul_macro, test_sub_macro};
 
 proptest! {
 

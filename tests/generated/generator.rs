@@ -4,7 +4,7 @@
 use rand::Rng;
 
 /// Number of test cases to generate per type
-pub const NUM_TEST_CASES: usize = 1;
+pub const NUM_TEST_CASES: usize = 50;
 
 /// Basic arithmetic operators that will be used in the unsafe expressions
 const OPERATORS: [&str; 5] = ["+", "-", "*", "/", "%"];
@@ -13,11 +13,13 @@ const OPERATORS: [&str; 5] = ["+", "-", "*", "/", "%"];
 const CHECKED_OPERATORS: [&str; 5] = ["checked_add", "checked_sub", "checked_mul", "checked_div", "checked_rem"];
 
 /// All numeric types that will be tested
-const NUMERIC_TYPES: [&str; 10] = [
+const NUMERIC_TYPES: [&str; 12] = [
     // Unsigned integers
     "u8", "u16", "u32", "u64", "u128",
     // Signed integers  
     "i8", "i16", "i32", "i64", "i128",
+    // usize
+    "usize", "isize",
     // TODO: Floating point
     // "f32", "f64",
 ];
@@ -62,8 +64,8 @@ impl ExpressionBuilder {
 fn generate_single_test(test_number: usize, numeric_type: &str) -> String {
     let mut rng = rand::rng();
     
-    // Generate between 2 and 4 arguments
-    let num_args = rng.random_range(2..=100);
+    // Generate between 2 and 10 arguments
+    let num_args = rng.random_range(2..=10);
     let arg_names: Vec<String> = (1..=num_args).map(|i| format!("a{i}")).collect();
     
     let mut builder = ExpressionBuilder::new(&arg_names[0]);
@@ -92,6 +94,8 @@ fn generate_single_test(test_number: usize, numeric_type: &str) -> String {
         "i128" => "rng.random::<i128>()",
         "f32" => "rng.random::<f32>()",
         "f64" => "rng.random::<f64>()",
+        "usize" => "rng.random::<u64>() as usize",
+        "isize" => "rng.random::<i64>() as isize",
         _ => unreachable!()
     };
     

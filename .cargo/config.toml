@@ -5,5 +5,6 @@ xclippy = [
   "--all-targets",
   "--",
   "-Wclippy::all",
-  "-Aclippy::result-unit-err"
+  "-Aclippy::result-unit-err",
+  "-Aclippy::too-many-arguments"
 ]

@@ -1,0 +1,33 @@
+repos:
+  - repo: local
+    hooks:
+      # ---------------------------------------------
+      # Rust formatting: ensure code is formatted with rustfmt.
+      # ---------------------------------------------
+      - id: cargo-fmt
+        name: "cargo fmt --check"
+        entry: bash -c "cargo fmt --all -- --check"
+        language: system
+        types: [rust]
+        always_run: true
+
+      # ---------------------------------------------
+      # Rust linter: fail commit if clippy reports warnings.
+      # ---------------------------------------------
+      - id: cargo-clippy
+        name: "cargo clippy"
+        entry: bash -c "cargo xclippy"
+        language: system
+        types: [rust]
+        always_run: true
+
+      # ---------------------------------------------
+      # Run unit tests on every commit
+      # ---------------------------------------------
+      - id: cargo-test
+        name: "cargo test"
+        entry: bash -c "cargo test --workspace --quiet"
+        language: system
+        types: [rust]
+        pass_filenames: false
+        always_run: true
