@@ -15,7 +15,7 @@ Add `safe-math-rs` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-safe-math-rs = "0.1.0"
+safe-math-rs = { git = "https://github.com/GotenJBZ/safe-math-rs" }
 ```
 
 Use the `#[safe_math]` macro in your functions:
