@@ -1,6 +1,6 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, ItemFn, Expr, ExprBinary, BinOp};
+use syn::{BinOp, Expr, ExprBinary, ItemFn, parse_macro_input};
 
 #[proc_macro_attribute]
 pub fn safe_math(_attr: TokenStream, item: TokenStream) -> TokenStream {
@@ -17,59 +17,107 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
     impl Fold for MathRewriter {
         fn fold_expr(&mut self, expr: Expr) -> Expr {
             match &expr {
-                Expr::Binary(ExprBinary { left, op: BinOp::Add(_), right, .. }) => {
+                Expr::Binary(ExprBinary {
+                    left,
+                    op: BinOp::Add(_),
+                    right,
+                    ..
+                }) => {
                     let left = self.fold_expr(*left.clone());
                     let right = self.fold_expr(*right.clone());
                     syn::parse_quote! { safe_math_rs::safe_add(#left, #right)? }
                 }
-                Expr::Binary(ExprBinary { left, op: BinOp::Sub(_), right, .. }) => {
+                Expr::Binary(ExprBinary {
+                    left,
+                    op: BinOp::Sub(_),
+                    right,
+                    ..
+                }) => {
                     let left = self.fold_expr(*left.clone());
                     let right = self.fold_expr(*right.clone());
                     syn::parse_quote! { safe_math_rs::safe_sub(#left, #right)? }
                 }
-                Expr::Binary(ExprBinary { left, op: BinOp::Mul(_), right, .. }) => {
+                Expr::Binary(ExprBinary {
+                    left,
+                    op: BinOp::Mul(_),
+                    right,
+                    ..
+                }) => {
                     let left = self.fold_expr(*left.clone());
                     let right = self.fold_expr(*right.clone());
                     syn::parse_quote! { safe_math_rs::safe_mul(#left, #right)? }
                 }
-                Expr::Binary(ExprBinary { left, op: BinOp::Div(_), right, .. }) => {
+                Expr::Binary(ExprBinary {
+                    left,
+                    op: BinOp::Div(_),
+                    right,
+                    ..
+                }) => {
                     let left = self.fold_expr(*left.clone());
                     let right = self.fold_expr(*right.clone());
                     syn::parse_quote! { safe_math_rs::safe_div(#left, #right)? }
                 }
-                Expr::Binary(ExprBinary { left, op: BinOp::Rem(_), right, .. }) => {
+                Expr::Binary(ExprBinary {
+                    left,
+                    op: BinOp::Rem(_),
+                    right,
+                    ..
+                }) => {
                     let left = self.fold_expr(*left.clone());
                     let right = self.fold_expr(*right.clone());
                     syn::parse_quote! { safe_math_rs::safe_rem(#left, #right)? }
                 }
-                Expr::Binary(ExprBinary { left, op: BinOp::AddAssign(_), right, .. }) => {
+                Expr::Binary(ExprBinary {
+                    left,
+                    op: BinOp::AddAssign(_),
+                    right,
+                    ..
+                }) => {
                     let left = self.fold_expr(*left.clone());
                     let right = self.fold_expr(*right.clone());
                     syn::parse_quote! { #left = safe_math_rs::safe_add(#left, #right)? }
                 }
-                Expr::Binary(ExprBinary { left, op: BinOp::SubAssign(_), right, .. }) => {
+                Expr::Binary(ExprBinary {
+                    left,
+                    op: BinOp::SubAssign(_),
+                    right,
+                    ..
+                }) => {
                     let left = self.fold_expr(*left.clone());
                     let right = self.fold_expr(*right.clone());
                     syn::parse_quote! { #left = safe_math_rs::safe_sub(#left, #right)? }
                 }
-                Expr::Binary(ExprBinary { left, op: BinOp::MulAssign(_), right, .. }) => {
+                Expr::Binary(ExprBinary {
+                    left,
+                    op: BinOp::MulAssign(_),
+                    right,
+                    ..
+                }) => {
                     let left = self.fold_expr(*left.clone());
                     let right = self.fold_expr(*right.clone());
                     syn::parse_quote! { #left = safe_math_rs::safe_mul(#left, #right)? }
                 }
-                Expr::Binary(ExprBinary { left, op: BinOp::DivAssign(_), right, .. }) => {
+                Expr::Binary(ExprBinary {
+                    left,
+                    op: BinOp::DivAssign(_),
+                    right,
+                    ..
+                }) => {
                     let left = self.fold_expr(*left.clone());
                     let right = self.fold_expr(*right.clone());
                     syn::parse_quote! { #left = safe_math_rs::safe_div(#left, #right)? }
                 }
-                Expr::Binary(ExprBinary { left, op: BinOp::RemAssign(_), right, .. }) => {
+                Expr::Binary(ExprBinary {
+                    left,
+                    op: BinOp::RemAssign(_),
+                    right,
+                    ..
+                }) => {
                     let left = self.fold_expr(*left.clone());
                     let right = self.fold_expr(*right.clone());
                     syn::parse_quote! { #left = safe_math_rs::safe_rem(#left, #right)? }
                 }
-                _=> {
-                    fold::fold_expr(self, expr)
-                }
+                _ => fold::fold_expr(self, expr),
             }
         }
     }

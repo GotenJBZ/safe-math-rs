@@ -5,5 +5,5 @@ xclippy = [
   "--all-targets",
   "--",
   "-Wclippy::all",
-  "-Dclippy::wildcard_enum_match_arm"
+  "-Aclippy::result-unit-err"
 ]

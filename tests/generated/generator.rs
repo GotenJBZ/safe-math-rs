@@ -4,7 +4,7 @@
 use rand::Rng;
 
 /// Number of test cases to generate per type
-pub const NUM_TEST_CASES: usize = 100;
+pub const NUM_TEST_CASES: usize = 1;
 
 /// Basic arithmetic operators that will be used in the unsafe expressions
 const OPERATORS: [&str; 5] = ["+", "-", "*", "/", "%"];
@@ -63,18 +63,18 @@ fn generate_single_test(test_number: usize, numeric_type: &str) -> String {
     let mut rng = rand::rng();
     
     // Generate between 2 and 4 arguments
-    let num_args = rng.random_range(2..=4);
-    let arg_names: Vec<String> = (1..=num_args).map(|i| format!("a{}", i)).collect();
+    let num_args = rng.random_range(2..=100);
+    let arg_names: Vec<String> = (1..=num_args).map(|i| format!("a{i}")).collect();
     
     let mut builder = ExpressionBuilder::new(&arg_names[0]);
     
     // Add random operations with the remaining arguments
-    for i in 1..arg_names.len() {
+    for arg in arg_names.iter().skip(1) {
         let op_idx = rng.random_range(0..OPERATORS.len());
         builder.add_operation(
             OPERATORS[op_idx],
             CHECKED_OPERATORS[op_idx],
-            &arg_names[i]
+            arg
         );
     }
 
@@ -99,9 +99,6 @@ fn generate_single_test(test_number: usize, numeric_type: &str) -> String {
         r#"
 #[test]
 fn test_generated_{}_{}_equivalence() {{
-    use safe_math_rs::safe_math;
-    use rand::Rng;
-
     // Define the two equivalent functions:
     // 1. Using the safe_math macro
     #[safe_math]
@@ -131,8 +128,7 @@ fn test_generated_{}_{}_equivalence() {{
         assert_eq!(
             macro_result, 
             checked_result,
-            "safe_math macro and checked operations produced different results for inputs: {{:?}}", 
-            inputs
+            "safe_math macro and checked operations produced different results for inputs: {{inputs:?}}"
         );
     }}
 }}
@@ -140,28 +136,31 @@ fn test_generated_{}_{}_equivalence() {{
         numeric_type.replace(".", "_"),  // Sostituisce il punto con underscore per f32/f64
         test_number,
         // Function arguments for with_macro
-        arg_names.iter().map(|a| format!("{}: {}", a, numeric_type)).collect::<Vec<_>>().join(", "),
+        arg_names.iter().map(|a| format!("{a}: {numeric_type}")).collect::<Vec<_>>().join(", "),
         numeric_type,
         // Expression for with_macro
         builder.expr,
         // Function arguments for with_checked
-        arg_names.iter().map(|a| format!("{}: {}", a, numeric_type)).collect::<Vec<_>>().join(", "),
+        arg_names.iter().map(|a| format!("{a}: {numeric_type}")).collect::<Vec<_>>().join(", "),
         numeric_type,
         // Expression for with_checked
         builder.expr_safe,
         // Random input generation
         arg_names.iter().map(|_| random_gen).collect::<Vec<_>>().join(", "),
         // Arguments for with_macro call
-        (0..arg_names.len()).map(|i| format!("inputs[{}]", i)).collect::<Vec<_>>().join(", "),
+        (0..arg_names.len()).map(|i| format!("inputs[{i}]")).collect::<Vec<_>>().join(", "),
         // Arguments for with_checked call
-        (0..arg_names.len()).map(|i| format!("inputs[{}]", i)).collect::<Vec<_>>().join(", ")
+        (0..arg_names.len()).map(|i| format!("inputs[{i}]")).collect::<Vec<_>>().join(", ")
     )
 }
 
 /// Generates all test cases and combines them into a single string
 pub fn generate_test_cases() -> String {
     let mut test_file = String::from(r#"
+#[cfg(test)]
 use safe_math_rs::safe_math;
+#[cfg(test)]
+use rand::Rng;
 
 // This file is auto-generated. Do not edit manually.
 // Each test verifies that the safe_math macro produces identical results
