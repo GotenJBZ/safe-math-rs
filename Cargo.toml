@@ -1,3 +1,10 @@
+[workspace]
+members = [
+    ".",
+    "safe_math_macros",
+    "tests/generated"
+]
+
 [package]
 name = "safe_math_rs"
 version = "0.1.0"

@@ -1,0 +1,17 @@
+[package]
+name = "safe_math_tests"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+test = true
+doctest = false
+
+[dependencies]
+safe_math_rs = { path = "../.." }
+rand = "0.9.1"
+
+[build-dependencies]
+rand = "0.9.1"

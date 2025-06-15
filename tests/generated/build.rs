@@ -3,12 +3,12 @@ use std::path::Path;
 use std::env;
 
 mod test_generator {
-    include!("tests/generated/generator.rs");
+    include!("generator.rs");
 }
 
 fn main() {
     // Tell Cargo to re-run this script if the generator code changes
-    println!("cargo:rerun-if-changed=tests/generated/generator.rs");
+    println!("cargo:rerun-if-changed=generator.rs");
     
     // Generate the test cases using our generator module
     let test_cases = test_generator::generate_test_cases();
@@ -22,4 +22,4 @@ fn main() {
     
     // Print a build message showing how many test cases were generated
     println!("cargo:warning=Generated {} test cases", test_generator::NUM_TEST_CASES);
-}
+} 
