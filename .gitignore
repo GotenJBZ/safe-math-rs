@@ -1,0 +1,3 @@
+target/
+safe_math_macros/target/
+examples/*/target/

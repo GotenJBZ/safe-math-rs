@@ -1,0 +1,9 @@
+[alias]
+xclippy = [
+  "clippy",
+  "--workspace",
+  "--all-targets",
+  "--",
+  "-Wclippy::all",
+  "-Dclippy::wildcard_enum_match_arm"
+]

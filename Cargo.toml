@@ -1,0 +1,15 @@
+[package]
+name = "safe_math_rs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+num-traits = "0.2.19"
+safe_math_macros = { path = "./safe_math_macros" }
+
+[dev-dependencies]
+proptest = "1.7.0"
+proptest-derive = "0.6.0"
+rand = "0.9.1"
+rayon = "1.10.0"
+simple-tqdm = { version = "0.2.0", features = ["rayon"] }
