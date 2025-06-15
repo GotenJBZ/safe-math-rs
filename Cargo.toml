@@ -2,7 +2,8 @@
 members = [
     ".",
     "safe_math_macros",
-    "tests/generated"
+    "tests/generated",
+    "examples/basic"
 ]
 
 [package]
