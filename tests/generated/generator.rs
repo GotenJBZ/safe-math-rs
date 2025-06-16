@@ -162,7 +162,7 @@ fn test_generated_{}_{}_equivalence() {{
 pub fn generate_test_cases() -> String {
     let mut test_file = String::from(r#"
 #[cfg(test)]
-use safe_math_rs::safe_math;
+use safe_math::safe_math;
 #[cfg(test)]
 use rand::Rng;
 
