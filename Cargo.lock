@@ -12,7 +12,7 @@ checksum = "ace50bade8e6234aa140d9a2f552bbee1db4d353f69b8217bc503490fc1a9f26"
 name = "basic"
 version = "0.1.0"
 dependencies = [
- "safe_math_rs",
+ "safe_math",
 ]
 
 [[package]]
@@ -367,16 +367,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "safe_math_macros"
-version = "0.1.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
-name = "safe_math_rs"
+name = "safe_math"
 version = "0.1.0"
 dependencies = [
  "num-traits",
@@ -389,11 +380,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "safe_math_macros"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "safe_math_tests"
 version = "0.1.0"
 dependencies = [
  "rand",
- "safe_math_rs",
+ "safe_math",
 ]
 
 [[package]]

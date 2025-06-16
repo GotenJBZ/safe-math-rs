@@ -1,8 +1,8 @@
-# safe-math-rs
+# safe-math
 
 ## Overview
 
-`safe-math-rs` is a Rust library that provides safe mathematical operations using the `#[safe_math]` procedural macro. It automatically prevents overflow and underflow by converting standard arithmetic operations into their checked counterparts.
+`safe-math` is a Rust library that provides safe mathematical operations using the `#[safe_math]` procedural macro. It automatically prevents overflow and underflow by converting standard arithmetic operations into their checked counterparts.
 
 ## Features
 
@@ -11,17 +11,17 @@
 
 ## Usage
 
-Add `safe-math-rs` to your `Cargo.toml`:
+Add `safe-math` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-safe-math-rs = { git = "https://github.com/GotenJBZ/safe-math-rs" }
+safe-math = { git = "https://github.com/GotenJBZ/safe-math" }
 ```
 
 Use the `#[safe_math]` macro in your functions:
 
 ```rust
-use safe_math_rs::safe_math;
+use safe_math::safe_math;
 
 #[safe_math]
 fn calculate(a: u8, b: u8) -> Result<u8, ()> {
@@ -51,7 +51,7 @@ is transformed into:
 
 ```rust
 fn add(a: u8, b: u8) -> Result<u8, ()> {
-    Ok(safe_math_rs::safe_add(a, b)?)
+    Ok(safe_math::safe_add(a, b)?)
 }
 ```
 

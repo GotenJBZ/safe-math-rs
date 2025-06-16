@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
 use proptest::prelude::*;
-use safe_math_rs::safe_math;
+use safe_math::safe_math;
 
 // Basic test operations
 #[safe_math]
