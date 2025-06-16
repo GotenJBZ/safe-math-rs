@@ -93,7 +93,7 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     let left = self.fold_expr(*left);
                     let right = self.fold_expr(*right);
                     match &left {
-                        // Handle array indexing: arr[i] += x
+                        // Handle array indexing and function calls: arr[i] += x, f(x) += y
                         Expr::Index(_) | Expr::Call(_) => {
                             let tmp_var = generate_unique_ident("add");
                             syn::parse_quote! {{
