@@ -6,7 +6,7 @@
 //! ## Basic Usage
 //!
 //! ```rust
-//! use safe_math_rs::safe_math;
+//! use safe_math::safe_math;
 //!
 //! #[safe_math]
 //! fn calculate(a: u8, b: u8) -> Result<u8, ()> {

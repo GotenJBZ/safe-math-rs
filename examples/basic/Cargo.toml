@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-safe_math_rs = { path = "../../" }
+safe_math = { path = "../../" }

@@ -1,4 +1,4 @@
-use safe_math_rs::*;
+use safe_math::*;
 
 mod common;
 use common::{test_add_macro, test_div_macro, test_mul_macro, test_sub_macro};
