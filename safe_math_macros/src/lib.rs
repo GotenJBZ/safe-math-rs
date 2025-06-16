@@ -16,16 +16,16 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
     struct MathRewriter;
     impl Fold for MathRewriter {
         fn fold_expr(&mut self, expr: Expr) -> Expr {
-            match &expr {
+            match expr {
                 Expr::Binary(ExprBinary {
                     left,
                     op: BinOp::Add(_),
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left.clone());
-                    let right = self.fold_expr(*right.clone());
-                    syn::parse_quote! { safe_math::safe_add(#left, #right)? }
+                    let left = self.fold_expr(*left);
+                    let right = self.fold_expr(*right);
+                    syn::parse_quote! { ::safe_math::safe_add(#left, #right)? }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -33,9 +33,9 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left.clone());
-                    let right = self.fold_expr(*right.clone());
-                    syn::parse_quote! { safe_math::safe_sub(#left, #right)? }
+                    let left = self.fold_expr(*left);
+                    let right = self.fold_expr(*right);
+                    syn::parse_quote! { ::safe_math::safe_sub(#left, #right)? }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -43,9 +43,9 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left.clone());
-                    let right = self.fold_expr(*right.clone());
-                    syn::parse_quote! { safe_math::safe_mul(#left, #right)? }
+                    let left = self.fold_expr(*left);
+                    let right = self.fold_expr(*right);
+                    syn::parse_quote! { ::safe_math::safe_mul(#left, #right)? }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -53,9 +53,9 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left.clone());
-                    let right = self.fold_expr(*right.clone());
-                    syn::parse_quote! { safe_math::safe_div(#left, #right)? }
+                    let left = self.fold_expr(*left);
+                    let right = self.fold_expr(*right);
+                    syn::parse_quote! { ::safe_math::safe_div(#left, #right)? }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -63,9 +63,9 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left.clone());
-                    let right = self.fold_expr(*right.clone());
-                    syn::parse_quote! { safe_math::safe_rem(#left, #right)? }
+                    let left = self.fold_expr(*left);
+                    let right = self.fold_expr(*right);
+                    syn::parse_quote! { ::safe_math::safe_rem(#left, #right)? }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -73,9 +73,9 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left.clone());
-                    let right = self.fold_expr(*right.clone());
-                    syn::parse_quote! { #left = safe_math::safe_add(#left, #right)? }
+                    let left = self.fold_expr(*left);
+                    let right = self.fold_expr(*right);
+                    syn::parse_quote! { #left = ::safe_math::safe_add(#left, #right)? }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -83,9 +83,9 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left.clone());
-                    let right = self.fold_expr(*right.clone());
-                    syn::parse_quote! { #left = safe_math::safe_sub(#left, #right)? }
+                    let left = self.fold_expr(*left);
+                    let right = self.fold_expr(*right);
+                    syn::parse_quote! { #left = ::safe_math::safe_sub(#left, #right)? }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -93,9 +93,9 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left.clone());
-                    let right = self.fold_expr(*right.clone());
-                    syn::parse_quote! { #left = safe_math::safe_mul(#left, #right)? }
+                    let left = self.fold_expr(*left);
+                    let right = self.fold_expr(*right);
+                    syn::parse_quote! { #left = ::safe_math::safe_mul(#left, #right)? }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -103,9 +103,9 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left.clone());
-                    let right = self.fold_expr(*right.clone());
-                    syn::parse_quote! { #left = safe_math::safe_div(#left, #right)? }
+                    let left = self.fold_expr(*left);
+                    let right = self.fold_expr(*right);
+                    syn::parse_quote! { #left = ::safe_math::safe_div(#left, #right)? }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -113,9 +113,9 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left.clone());
-                    let right = self.fold_expr(*right.clone());
-                    syn::parse_quote! { #left = safe_math::safe_rem(#left, #right)? }
+                    let left = self.fold_expr(*left);
+                    let right = self.fold_expr(*right);
+                    syn::parse_quote! { #left = ::safe_math::safe_rem(#left, #right)? }
                 }
                 _ => fold::fold_expr(self, expr),
             }
