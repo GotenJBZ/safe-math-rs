@@ -1,9 +1,7 @@
-use core::fmt::Debug;
-
 use crate::error::SafeMathResult;
 
 /// Trait that defines safe mathematical operations for a type.
-pub trait SafeMathOps: Copy + Debug {
+pub trait SafeMathOps: Copy {
     fn safe_add(self, rhs: Self) -> SafeMathResult<Self>;
     fn safe_sub(self, rhs: Self) -> SafeMathResult<Self>;
     fn safe_mul(self, rhs: Self) -> SafeMathResult<Self>;
