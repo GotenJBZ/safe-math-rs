@@ -37,3 +37,30 @@ fn test_safe_functions_directly() {
     assert_eq!(safe_div(30u8, 6u8), Ok(5u8));
     assert!(safe_div(10u8, 0u8).is_err());
 }
+
+#[test]
+fn test_complex_assignments() {
+    use std::cell::RefCell;
+
+    #[safe_math]
+    fn test_array_assignment(n: u8) -> Result<[u8; 1], ()> {
+        let mut arr = [254u8];
+        arr[0] += n;
+        Ok(arr)
+    }
+
+    #[safe_math]
+    fn test_complex_expr(n: u8) -> Result<(), ()> {
+        let array = RefCell::new([254u8]);
+        array.borrow_mut()[0] += n;
+        Ok(())
+    }
+
+    // Test array indexing
+    assert!(test_array_assignment(2).is_err()); // Should fail due to overflow in arr[1]
+    assert_eq!(test_array_assignment(1), Ok([255u8]));
+
+    // Test complex expression with RefCell
+    assert!(test_complex_expr(2).is_err()); // Should fail due to overflow
+    assert_eq!(test_complex_expr(1), Ok(()));
+}
