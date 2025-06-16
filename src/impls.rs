@@ -65,23 +65,15 @@ impl_safe_math_float!(f32, f64);
 
 // === Crate-internal generic helpers ========================================
 
-#[inline(always)]
-pub fn safe_add<T: SafeMathOps>(a: T, b: T) -> SafeMathResult<T> {
-    a.safe_add(b)
+macro_rules! impl_safe_math_ops {
+    ($($op:ident),*) => {
+        $(
+            #[inline(always)]
+            pub fn $op<T: SafeMathOps>(a: T, b: T) -> SafeMathResult<T> {
+                a.$op(b)
+            }
+        )*
+    };
 }
-#[inline(always)]
-pub fn safe_sub<T: SafeMathOps>(a: T, b: T) -> SafeMathResult<T> {
-    a.safe_sub(b)
-}
-#[inline(always)]
-pub fn safe_mul<T: SafeMathOps>(a: T, b: T) -> SafeMathResult<T> {
-    a.safe_mul(b)
-}
-#[inline(always)]
-pub fn safe_div<T: SafeMathOps>(a: T, b: T) -> SafeMathResult<T> {
-    a.safe_div(b)
-}
-#[inline(always)]
-pub fn safe_rem<T: SafeMathOps>(a: T, b: T) -> SafeMathResult<T> {
-    a.safe_rem(b)
-}
+
+impl_safe_math_ops!(safe_add, safe_sub, safe_mul, safe_div, safe_rem);
