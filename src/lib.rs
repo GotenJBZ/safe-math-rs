@@ -34,6 +34,8 @@
 
 // Re-export the procedural macro so users can simply `use safe_math::safe_math`.
 pub use safe_math_macros::safe_math;
+#[cfg(feature = "derive")]
+pub use safe_math_macros::SafeMathOps;
 
 // Internal modules
 mod error;
