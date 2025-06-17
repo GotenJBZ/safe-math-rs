@@ -1,9 +1,12 @@
 use proc_macro::TokenStream;
-use quote::quote;
+use quote::{format_ident, quote};
+use std::sync::atomic::{AtomicUsize, Ordering};
 use syn::{parse_macro_input, BinOp, Expr, ExprBinary, ItemFn};
-
 #[cfg(feature = "derive")]
 mod derive;
+
+// Global counter for generating unique variable names
+static TEMP_VAR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[proc_macro_attribute]
 pub fn safe_math(_attr: TokenStream, item: TokenStream) -> TokenStream {
@@ -12,6 +15,19 @@ pub fn safe_math(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let new_block = rewrite_block(orig_block);
     input_fn.block = Box::new(new_block);
     TokenStream::from(quote! { #input_fn })
+}
+
+/// Generates a unique variable name that is extremely unlikely to collide
+/// with user-defined variables
+fn generate_unique_temp_var() -> syn::Ident {
+    let counter = TEMP_VAR_COUNTER.fetch_add(1, Ordering::SeqCst);
+    // Use a very distinctive prefix that users are unlikely to use
+    // Include the counter to ensure uniqueness across multiple macro invocations
+    format_ident!(
+        "__safe_math_temp_ref_{}_{}",
+        std::process::id(), // Process ID for uniqueness across processes
+        counter             // Counter for uniqueness within process
+    )
 }
 
 fn rewrite_block(block: syn::Block) -> syn::Block {
@@ -70,15 +86,22 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     let right = self.fold_expr(*right);
                     syn::parse_quote! { ::safe_math::safe_rem(#left, #right)? }
                 }
+                // Handle compound assignments by transforming them to regular assignments
+                // to avoid double evaluation of the left-hand side
                 Expr::Binary(ExprBinary {
                     left,
                     op: BinOp::AddAssign(_),
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left);
                     let right = self.fold_expr(*right);
-                    syn::parse_quote! { #left = ::safe_math::safe_add(#left, #right)? }
+                    let temp_var = generate_unique_temp_var();
+                    syn::parse_quote! {
+                        {
+                            let #temp_var = &mut #left;
+                            *#temp_var = ::safe_math::safe_add(*#temp_var, #right)?;
+                        }
+                    }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -86,9 +109,14 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left);
                     let right = self.fold_expr(*right);
-                    syn::parse_quote! { #left = ::safe_math::safe_sub(#left, #right)? }
+                    let temp_var = generate_unique_temp_var();
+                    syn::parse_quote! {
+                        {
+                            let #temp_var = &mut #left;
+                            *#temp_var = ::safe_math::safe_sub(*#temp_var, #right)?;
+                        }
+                    }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -96,9 +124,14 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left);
                     let right = self.fold_expr(*right);
-                    syn::parse_quote! { #left = ::safe_math::safe_mul(#left, #right)? }
+                    let temp_var = generate_unique_temp_var();
+                    syn::parse_quote! {
+                        {
+                            let #temp_var = &mut #left;
+                            *#temp_var = ::safe_math::safe_mul(*#temp_var, #right)?;
+                        }
+                    }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -106,9 +139,14 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left);
                     let right = self.fold_expr(*right);
-                    syn::parse_quote! { #left = ::safe_math::safe_div(#left, #right)? }
+                    let temp_var = generate_unique_temp_var();
+                    syn::parse_quote! {
+                        {
+                            let #temp_var = &mut #left;
+                            *#temp_var = ::safe_math::safe_div(*#temp_var, #right)?;
+                        }
+                    }
                 }
                 Expr::Binary(ExprBinary {
                     left,
@@ -116,9 +154,14 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
                     right,
                     ..
                 }) => {
-                    let left = self.fold_expr(*left);
                     let right = self.fold_expr(*right);
-                    syn::parse_quote! { #left = ::safe_math::safe_rem(#left, #right)? }
+                    let temp_var = generate_unique_temp_var();
+                    syn::parse_quote! {
+                        {
+                            let #temp_var = &mut #left;
+                            *#temp_var = ::safe_math::safe_rem(*#temp_var, #right)?;
+                        }
+                    }
                 }
                 _ => fold::fold_expr(self, expr),
             }
