@@ -29,5 +29,8 @@ jobs:
       - name: Lint with xclippy (strict)
         run: cargo xclippy
 
+      - name: Check for unused dependencies
+        run: cargo machete
+
       - name: Run tests
         run: cargo test --workspace --all-targets --all-features --quiet 

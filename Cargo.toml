@@ -16,7 +16,6 @@ edition = "2021"
 derive = ["safe_math_macros/derive"]
 
 [dependencies]
-num-traits = "0.2.19"
 safe_math_macros = { path = "./safe_math_macros" }
 
 [dev-dependencies]

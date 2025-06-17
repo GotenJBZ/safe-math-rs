@@ -7,10 +7,9 @@ edition = "2021"
 proc-macro = true
 
 [features]
-derive = ["num-traits"]
+derive = []
 
 [dependencies]
 syn = { version = "2", features = ["full", "fold"] }
 quote = "1"
 proc-macro2 = "1"
-num-traits = { version = "0.2.19", optional = true }

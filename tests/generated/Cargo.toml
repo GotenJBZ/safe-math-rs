@@ -10,8 +10,10 @@ test = true
 doctest = false
 
 [dependencies]
-safe_math = { path = "../.." }
+
+[dev-dependencies]
 rand = "0.9.1"
+safe_math = { path = "../.." }
 
 [build-dependencies]
 rand = "0.9.1"

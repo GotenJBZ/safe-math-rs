@@ -378,7 +378,6 @@ dependencies = [
 name = "safe_math"
 version = "0.1.0"
 dependencies = [
- "num-traits",
  "proptest",
  "proptest-derive",
  "rand",
@@ -391,7 +390,6 @@ dependencies = [
 name = "safe_math_macros"
 version = "0.1.0"
 dependencies = [
- "num-traits",
  "proc-macro2",
  "quote",
  "syn",
