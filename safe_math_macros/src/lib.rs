@@ -1,7 +1,11 @@
 use proc_macro::TokenStream;
 use quote::{format_ident, quote};
 use std::sync::atomic::{AtomicUsize, Ordering};
-use syn::{BinOp, Expr, ExprBinary, ItemFn, parse_macro_input};
+use syn::{parse_macro_input, BinOp, Expr, ExprBinary, ItemFn};
+
+
+#[cfg(feature = "derive")]
+mod derive;
 
 // Global counter for generating unique variable names
 static TEMP_VAR_COUNTER: AtomicUsize = AtomicUsize::new(0);
@@ -166,4 +170,10 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
         }
     }
     MathRewriter.fold_block(block)
+}
+
+#[cfg(feature = "derive")]
+#[proc_macro_derive(SafeMathOps, attributes(SafeMathOps))]
+pub fn derive_safe_math_ops(input: TokenStream) -> TokenStream {
+    derive::derive_safe_math_ops(input)
 }
