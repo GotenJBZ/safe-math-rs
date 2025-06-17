@@ -3,13 +3,17 @@ members = [
     ".",
     "safe_math_macros",
     "tests/generated",
-    "examples/basic"
+    "examples/basic",
+    "examples/derive"
 ]
 
 [package]
 name = "safe_math"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+
+[features]
+derive = ["safe_math_macros/derive"]
 
 [dependencies]
 num-traits = "0.2.19"
