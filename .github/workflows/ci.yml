@@ -29,6 +29,9 @@ jobs:
       - name: Lint with xclippy (strict)
         run: cargo xclippy
 
+      - name: Install cargo-machete
+        run: cargo install cargo-machete
+
       - name: Check for unused dependencies
         run: cargo machete
 
