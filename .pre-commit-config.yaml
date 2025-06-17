@@ -31,3 +31,14 @@ repos:
         types: [rust]
         pass_filenames: false
         always_run: true
+
+      # ---------------------------------------------
+      # Check for unused dependencies
+      # ---------------------------------------------
+      - id: cargo-machete
+        name: "cargo machete"
+        entry: bash -c "cargo machete"
+        language: system
+        types: [rust]
+        pass_filenames: false
+        always_run: true

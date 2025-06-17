@@ -10,6 +10,8 @@ test = true
 doctest = false
 
 [dependencies]
+
+[dev-dependencies]
 safe_math = { path = "../.." }
 rand = "0.9.1"
 
