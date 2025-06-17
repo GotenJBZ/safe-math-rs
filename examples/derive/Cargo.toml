@@ -1,0 +1,8 @@
+[package]
+name = "derive-example"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+safe_math = { path = "../..", features = ["derive"] }
+num-traits = "0.2.19" 

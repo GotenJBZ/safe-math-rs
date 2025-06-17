@@ -2,6 +2,9 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, BinOp, Expr, ExprBinary, ItemFn};
 
+#[cfg(feature = "derive")]
+mod derive;
+
 #[proc_macro_attribute]
 pub fn safe_math(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let mut input_fn = parse_macro_input!(item as ItemFn);
@@ -122,4 +125,10 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
         }
     }
     MathRewriter.fold_block(block)
+}
+
+#[cfg(feature = "derive")]
+#[proc_macro_derive(SafeMathOps, attributes(SafeMathOps))]
+pub fn derive_safe_math_ops(input: TokenStream) -> TokenStream {
+    derive::derive_safe_math_ops(input)
 }
