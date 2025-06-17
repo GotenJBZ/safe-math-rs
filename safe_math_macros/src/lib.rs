@@ -2,8 +2,6 @@ use proc_macro::TokenStream;
 use quote::{format_ident, quote};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use syn::{parse_macro_input, BinOp, Expr, ExprBinary, ItemFn};
-
-
 #[cfg(feature = "derive")]
 mod derive;
 
