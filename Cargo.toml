@@ -29,6 +29,4 @@ safe_math_macros = { path = "./safe_math_macros" }
 proptest = "1.7.0"
 proptest-derive = "0.6.0"
 rand = "0.9.1"
-rayon = "1.10.0"
-simple-tqdm = { version = "0.2.0", features = ["rayon"] }
 num-traits = { version = "0.2" }
