@@ -1,7 +1,7 @@
 use proc_macro::TokenStream;
 use quote::{format_ident, quote};
 use std::sync::atomic::{AtomicUsize, Ordering};
-use syn::{parse_macro_input, BinOp, Expr, ExprBinary, ItemFn};
+use syn::{parse_macro_input, spanned::Spanned, BinOp, Expr, ExprBinary, ItemFn};
 #[cfg(feature = "derive")]
 mod derive;
 
@@ -12,6 +12,35 @@ static TEMP_VAR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 pub fn safe_math(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let mut input_fn = parse_macro_input!(item as ItemFn);
     let orig_block = *input_fn.block;
+
+    // ensure that the fn has a return type
+    let return_type = match &input_fn.sig.output {
+        syn::ReturnType::Type(_, ty) => ty,
+        syn::ReturnType::Default => {
+            return syn::Error::new(input_fn.sig.output.span(), "Function must return a Result")
+                .to_compile_error()
+                .into();
+        }
+    };
+
+    // ensure that the return type is a Result
+    let is_result = match &**return_type {
+        syn::Type::Path(type_path) => {
+            let segments = &type_path.path.segments;
+            segments
+                .last()
+                .map(|seg| seg.ident == "Result")
+                .unwrap_or(false)
+        }
+        _ => false,
+    };
+
+    if !is_result {
+        return syn::Error::new(return_type.span(), "Function must return a Result")
+            .to_compile_error()
+            .into();
+    }
+
     let new_block = rewrite_block(orig_block);
     input_fn.block = Box::new(new_block);
     TokenStream::from(quote! { #input_fn })
