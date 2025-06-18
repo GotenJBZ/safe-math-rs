@@ -2,9 +2,7 @@
 members = [
     ".",
     "safe_math_macros",
-    "tests/generated",
-    "examples/basic",
-    "examples/derive"
+    "tests/generated"
 ]
 
 [package]
@@ -15,6 +13,15 @@ edition = "2021"
 [features]
 derive = ["safe_math_macros/derive"]
 
+[[example]]
+name = "basic"
+path = "examples/basic.rs"
+
+[[example]]
+name = "derive"
+path = "examples/derive.rs"
+required-features = ["derive"]
+
 [dependencies]
 safe_math_macros = { path = "./safe_math_macros" }
 
@@ -24,6 +31,4 @@ proptest-derive = "0.6.0"
 rand = "0.9.1"
 rayon = "1.10.0"
 simple-tqdm = { version = "0.2.0", features = ["rayon"] }
-
-[build-dependencies]
-rand = "0.9.1"
+num-traits = { version = "0.2" }

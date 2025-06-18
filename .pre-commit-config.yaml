@@ -33,6 +33,17 @@ repos:
         always_run: true
 
       # ---------------------------------------------
+      # Check examples compilation
+      # ---------------------------------------------
+      - id: cargo-check-examples
+        name: "cargo check --examples"
+        entry: bash -c "cargo check --examples"
+        language: system
+        types: [rust]
+        pass_filenames: false
+        always_run: true
+
+      # ---------------------------------------------
       # Check for unused dependencies
       # ---------------------------------------------
       - id: cargo-machete
