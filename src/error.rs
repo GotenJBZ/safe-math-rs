@@ -7,6 +7,10 @@ pub enum SafeMathError {
     Overflow,
     /// Attempted to divide (or take remainder) by zero.
     DivisionByZero,
+
+    #[cfg(feature = "derive")]
+    /// The operation is not implemented for the given type.
+    NotImplemented,
 }
 
 impl fmt::Display for SafeMathError {
@@ -14,6 +18,8 @@ impl fmt::Display for SafeMathError {
         match self {
             SafeMathError::Overflow => write!(f, "arithmetic overflow"),
             SafeMathError::DivisionByZero => write!(f, "division by zero"),
+            #[cfg(feature = "derive")]
+            SafeMathError::NotImplemented => write!(f, "operation not implemented"),
         }
     }
 }
