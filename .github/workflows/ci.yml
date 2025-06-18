@@ -35,5 +35,8 @@ jobs:
       - name: Check for unused dependencies
         run: cargo machete
 
+      - name: Check examples compilation
+        run: cargo check --examples
+
       - name: Run tests
         run: cargo test --workspace --all-targets --all-features --quiet 
