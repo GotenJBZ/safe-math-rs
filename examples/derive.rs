@@ -3,7 +3,7 @@ use safe_math::{safe_math, SafeMathError, SafeMathOps};
 use std::ops::{Add, Div, Mul, Sub};
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug, Default, SafeMathOps)]
-#[SafeMathOps(add, sub, mul, div)]
+//#[SafeMathOps(add, sub, mul, div)]
 struct CustomNumber {
     a: i32,
 }
