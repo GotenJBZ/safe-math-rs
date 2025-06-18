@@ -23,7 +23,7 @@ macro_rules! generate_op_impl {
             }
         } else {
             quote! {
-                unimplemented!()
+                Err(SafeMathError::NotImplemented)
             }
         };
     };
