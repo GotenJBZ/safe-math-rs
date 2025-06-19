@@ -23,6 +23,9 @@ jobs:
       - name: Cache cargo registry + build
         uses: Swatinem/rust-cache@v2
 
+      - name: Check version consistency
+        run: ./scripts/check_versions.sh
+
       - name: Check formatting
         run: cargo fmt --all -- --check
 
