@@ -122,9 +122,9 @@ fn test_generated_{}_{}_equivalence() {{
     fn with_function_macro({}) -> Result<{}, ()> {{
         #[allow(unused_parens)]
         let result = {{
-            safe_math_block! {{{{
+            safe_math_block! {{
                 {}
-        }}}}
+        }}
         }};
         Ok(result)
     }}
