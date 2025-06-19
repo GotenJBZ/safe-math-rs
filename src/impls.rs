@@ -20,6 +20,7 @@ impl_safe_math_ops!(
 macro_rules! impl_safe_math_int {
     ($($t:ty),*) => {
         $(
+            #[diagnostic::do_not_recommend]
             impl SafeAdd for $t {
                 #[inline(always)]
                 fn safe_add(self, rhs: Self) -> SafeMathResult<Self> {
@@ -27,6 +28,7 @@ macro_rules! impl_safe_math_int {
                 }
             }
 
+            #[diagnostic::do_not_recommend]
             impl SafeSub for $t {
                 #[inline(always)]
                 fn safe_sub(self, rhs: Self) -> SafeMathResult<Self> {
@@ -34,6 +36,7 @@ macro_rules! impl_safe_math_int {
                 }
             }
 
+            #[diagnostic::do_not_recommend]
             impl SafeMul for $t {
                 #[inline(always)]
                 fn safe_mul(self, rhs: Self) -> SafeMathResult<Self> {
@@ -41,6 +44,7 @@ macro_rules! impl_safe_math_int {
                 }
             }
 
+            #[diagnostic::do_not_recommend]
             impl SafeDiv for $t {
                 #[inline(always)]
                 fn safe_div(self, rhs: Self) -> SafeMathResult<Self> {
@@ -54,6 +58,7 @@ macro_rules! impl_safe_math_int {
                 }
             }
 
+            #[diagnostic::do_not_recommend]
             impl SafeRem for $t {
                 #[inline(always)]
                 fn safe_rem(self, rhs: Self) -> SafeMathResult<Self> {
@@ -61,6 +66,7 @@ macro_rules! impl_safe_math_int {
                 }
             }
 
+            #[diagnostic::do_not_recommend]
             impl SafeMathOps for $t {
                 #[inline(always)]
                 fn safe_add(self, rhs: Self) -> SafeMathResult<Self> {
@@ -92,6 +98,7 @@ impl_safe_math_int!(u8, u16, u32, u64, u128, i8, i16, i32, i64, i128, usize, isi
 macro_rules! impl_safe_math_float {
     ($($t:ty),*) => {
         $(
+            #[diagnostic::do_not_recommend]
             impl SafeMathOps for $t {
                 #[inline(always)]
                 fn safe_add(self, rhs: Self) -> SafeMathResult<Self> {

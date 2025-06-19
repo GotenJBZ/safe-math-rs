@@ -1,19 +1,10 @@
-error[E0277]: `Foo` does not implement `SafeAdd`; add `add` to `#[SafeMathOps(...)]`
+error[E0277]: Type `Foo` cannot perform safe addition.
   --> tests/ui/bad_derive_missing_attributes.rs:23:1
    |
 23 | #[safe_math]
    | ^^^^^^^^^^^^ the trait `SafeAdd` is not implemented for `Foo`
    |
-   = help: the following other types implement trait `SafeAdd`:
-             i128
-             i16
-             i32
-             i64
-             i8
-             isize
-             u128
-             u16
-           and $N others
+   = note: Add `add` to `#[SafeMathOps(...)]` when deriving `SafeMathOps`.
 note: required by a bound in `safe_math::safe_add`
   --> src/impls.rs
    |
