@@ -2,6 +2,17 @@ repos:
   - repo: local
     hooks:
       # ---------------------------------------------
+      # Version check: ensure versions match between Cargo.toml files
+      # ---------------------------------------------
+      - id: version-check
+        name: "check versions consistency"
+        entry: bash -c "./scripts/check_versions.sh"
+        language: system
+        files: Cargo\.toml$
+        pass_filenames: false
+        always_run: true
+
+      # ---------------------------------------------
       # Rust formatting: ensure code is formatted with rustfmt.
       # ---------------------------------------------
       - id: cargo-fmt
