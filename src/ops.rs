@@ -5,7 +5,6 @@ pub use num_traits::ops::checked::{CheckedAdd, CheckedDiv, CheckedMul, CheckedRe
 
 #[diagnostic::on_unimplemented(message = "`{Self}` does not implement `SafeAdd`; \
                add `add` to `#[SafeMathOps(...)]`")]
-
 pub trait SafeAdd: Copy + CheckedAdd + Add<Output = Self> {
     fn safe_add(self, rhs: Self) -> SafeMathResult<Self>;
 }

@@ -1,13 +1,22 @@
 [workspace]
-members = ["safe_math_macros", "tests/generated"]
+members = ["safe-math-macros", "tests/generated"]
 
 [package]
-name = "safe_math"
+name = "safe-math"
 version = "0.1.0"
 edition = "2021"
+description = "Safe arithmetic using a procedural macro. Write normal math expressions with automatic overflow checks. No panics, no boilerplate."
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/GotenJBZ/safe-math-rs"
+homepage = "https://github.com/GotenJBZ/safe-math-rs"
+documentation = "https://docs.rs/safe-math"
+categories = ["mathematics","development-tools::procedural-macro-helpers","security"]
+rust-version = "1.78.0"
+include = ["src/*"]
 
 [features]
-derive = ["safe_math_macros/derive"]
+derive = ["safe-math-macros/derive"]
 
 [[example]]
 name = "basic"
@@ -20,7 +29,7 @@ required-features = ["derive"]
 
 [dependencies]
 num-traits = { version = "0.2"}
-safe_math_macros = { path = "./safe_math_macros" }
+safe-math-macros = { version = "0.1.0", path = "./safe-math-macros" }
 
 
 [dev-dependencies]
