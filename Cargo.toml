@@ -37,3 +37,5 @@ proptest = "1.7.0"
 proptest-derive = "0.6.0"
 rand = "0.9.1"
 num-traits = { version = "0.2" }
+trybuild = "1.0"
+safe-math-macros = { path = "./safe-math-macros", features = ["derive"] }

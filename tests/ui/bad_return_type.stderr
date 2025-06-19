@@ -1,0 +1,5 @@
+error: Function must return a Result
+ --> tests/ui/bad_return_type.rs:4:27
+  |
+4 | fn wrong_return_type() -> i32 { // should return Result<_, _>
+  |                           ^^^

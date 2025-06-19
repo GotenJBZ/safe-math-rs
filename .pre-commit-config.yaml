@@ -48,7 +48,7 @@ repos:
       # ---------------------------------------------
       - id: cargo-machete
         name: "cargo machete"
-        entry: bash -c "cargo machete"
+        entry: bash -c "cargo machete --skip-target-dir"
         language: system
         types: [rust]
         pass_filenames: false

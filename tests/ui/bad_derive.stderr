@@ -1,0 +1,17 @@
+error: Duplicate operation 'add' in `#[SafeMathOps]` attribute. Each operation should be listed only once.
+ --> tests/ui/bad_derive.rs:5:20
+  |
+5 | #[SafeMathOps(add, add)]
+  |                    ^^^
+
+error: Unknown operation 'unknown' in `#[SafeMathOps]` attribute. Supported operations are: add, sub, mul, div, rem.
+  --> tests/ui/bad_derive.rs:10:15
+   |
+10 | #[SafeMathOps(unknown)]
+   |               ^^^^^^^
+
+error: `#[SafeMathOps]` requires at least one operation, e.g. `#[SafeMathOps(add, sub)]`
+  --> tests/ui/bad_derive.rs:15:1
+   |
+15 | struct Baz(i32);
+   | ^^^^^^^^^^^^^^^^
