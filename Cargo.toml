@@ -1,9 +1,5 @@
 [workspace]
-members = [
-    ".",
-    "safe_math_macros",
-    "tests/generated"
-]
+members = ["safe_math_macros", "tests/generated"]
 
 [package]
 name = "safe_math"
