@@ -1,4 +1,4 @@
 target/
-safe_math_macros/target/
+safe-math-macros/target/
 examples/*/target/
 .cursor/

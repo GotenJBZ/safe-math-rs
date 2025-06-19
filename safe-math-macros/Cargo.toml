@@ -1,0 +1,24 @@
+[package]
+name = "safe-math-macros"
+version = "0.1.0" # ensure it matches the version in the root Cargo.toml
+edition = "2021"
+description = "Procedural macros for overflow-safe arithmetic operations"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/GotenJBZ/safe-math-rs"
+homepage = "https://github.com/GotenJBZ/safe-math-rs"
+documentation = "https://docs.rs/safe_math"
+categories = ["mathematics","development-tools::procedural-macro-helpers","security"]
+rust-version = "1.78.0"
+include = ["src/*"]
+
+[lib]
+proc-macro = true
+
+[features]
+derive = []
+
+[dependencies]
+syn = { version = "2", features = ["full", "fold"] }
+quote = "1"
+proc-macro2 = "1"
