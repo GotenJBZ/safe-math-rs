@@ -1,7 +1,7 @@
 use proc_macro::TokenStream;
 use quote::{format_ident, quote};
 use std::sync::atomic::{AtomicUsize, Ordering};
-use syn::{parse_macro_input, spanned::Spanned, BinOp, Expr, ExprBinary, ItemFn};
+use syn::{fold::Fold, parse_macro_input, spanned::Spanned, BinOp, Expr, ExprBinary, ItemFn};
 #[cfg(feature = "derive")]
 mod derive;
 
@@ -41,9 +41,16 @@ pub fn safe_math(_attr: TokenStream, item: TokenStream) -> TokenStream {
             .into();
     }
 
-    let new_block = rewrite_block(orig_block);
+    let new_block = MathRewriter.fold_block(orig_block);
     input_fn.block = Box::new(new_block);
     TokenStream::from(quote! { #input_fn })
+}
+
+#[proc_macro]
+pub fn safe_math_block(input: TokenStream) -> TokenStream {
+    let expression = parse_macro_input!(input as syn::Expr);
+    let rewritten_expr = MathRewriter.fold_expr(expression);
+    TokenStream::from(quote! { #rewritten_expr })
 }
 
 /// Generates a unique variable name that is extremely unlikely to collide
@@ -59,9 +66,13 @@ fn generate_unique_temp_var() -> syn::Ident {
     )
 }
 
-fn rewrite_block(block: syn::Block) -> syn::Block {
+mod rewrite {
+    use super::*;
+
     use syn::fold::{self, Fold};
-    struct MathRewriter;
+
+    pub struct MathRewriter;
+
     impl Fold for MathRewriter {
         fn fold_expr(&mut self, expr: Expr) -> Expr {
             match expr {
@@ -196,8 +207,9 @@ fn rewrite_block(block: syn::Block) -> syn::Block {
             }
         }
     }
-    MathRewriter.fold_block(block)
 }
+
+pub(crate) use rewrite::MathRewriter;
 
 #[cfg(feature = "derive")]
 #[proc_macro_derive(SafeMathOps, attributes(SafeMathOps))]
