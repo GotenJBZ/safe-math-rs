@@ -44,7 +44,7 @@ mod ops;
 
 // Re-export the most relevant items at the crate root for a clean API.
 pub use error::{SafeMathError, SafeMathResult};
-pub use ops::SafeMathOps;
+pub use ops::{SafeAdd, SafeDiv, SafeMathOps, SafeMul, SafeRem, SafeSub};
 
 // These helper functions are intentionally re-exported because the macro expands
 // to them, and users may want to call them directly in generic contexts.

@@ -19,7 +19,9 @@ path = "examples/derive.rs"
 required-features = ["derive"]
 
 [dependencies]
+num-traits = { version = "0.2"}
 safe_math_macros = { path = "./safe_math_macros" }
+
 
 [dev-dependencies]
 proptest = "1.7.0"
