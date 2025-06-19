@@ -44,14 +44,8 @@ mod ops;
 
 // Re-export the most relevant items at the crate root for a clean API.
 pub use error::{SafeMathError, SafeMathResult};
-#[cfg(not(feature = "derive"))]
-pub use ops::SafeMathOps;
-#[cfg(feature = "derive")]
 pub use ops::{SafeAdd, SafeDiv, SafeMathOps, SafeMul, SafeRem, SafeSub};
 
 // These helper functions are intentionally re-exported because the macro expands
 // to them, and users may want to call them directly in generic contexts.
-#[cfg(not(feature = "derive"))]
-pub use impls::{safe_add, safe_div, safe_mul, safe_rem, safe_sub};
-#[cfg(feature = "derive")]
 pub use impls::{safe_add, safe_div, safe_mul, safe_rem, safe_sub};
