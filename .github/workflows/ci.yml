@@ -33,7 +33,7 @@ jobs:
         run: cargo install cargo-machete
 
       - name: Check for unused dependencies
-        run: cargo machete
+        run: cargo machete --skip-target-dir
 
       - name: Check examples compilation
         run: cargo check --examples

@@ -1,0 +1,71 @@
+error[E0277]: the trait bound `Foo: num_traits::ops::checked::CheckedAdd` is not satisfied
+ --> tests/ui/bad_derive_missing_checked_trait_used.rs:6:8
+  |
+6 | struct Foo(i32);
+  |        ^^^ the trait `num_traits::ops::checked::CheckedAdd` is not implemented for `Foo`
+  |
+  = help: the following other types implement trait `num_traits::ops::checked::CheckedAdd`:
+            i128
+            i16
+            i32
+            i64
+            i8
+            isize
+            u128
+            u16
+          and $N others
+note: required by a bound in `SafeAdd`
+ --> src/ops.rs
+  |
+  | pub trait SafeAdd: Copy + CheckedAdd + Add<Output = Self> {
+  |                           ^^^^^^^^^^ required by this bound in `SafeAdd`
+  = note: `SafeAdd` is a "sealed trait", because to implement it you also need to implement `num_traits::ops::checked::CheckedAdd`, which is not accessible; this is usually done to force you to use one of the provided types that already implement it
+  = help: the following types implement the trait:
+            u8
+            u16
+            u32
+            u64
+            usize
+            u128
+            i8
+            i16
+          and $N others
+
+error[E0277]: the trait bound `Foo: num_traits::ops::checked::CheckedAdd` is not satisfied
+ --> tests/ui/bad_derive_missing_checked_trait_used.rs:4:27
+  |
+4 | #[derive(Debug,Copy,Clone,SafeMathOps)]
+  |                           ^^^^^^^^^^^ the trait `num_traits::ops::checked::CheckedAdd` is not implemented for `Foo`
+  |
+  = help: the following other types implement trait `num_traits::ops::checked::CheckedAdd`:
+            i128
+            i16
+            i32
+            i64
+            i8
+            isize
+            u128
+            u16
+          and $N others
+note: required by a bound in `safe_math::SafeAdd::safe_add`
+ --> src/ops.rs
+  |
+  | pub trait SafeAdd: Copy + CheckedAdd + Add<Output = Self> {
+  |                           ^^^^^^^^^^ required by this bound in `SafeAdd::safe_add`
+  |     fn safe_add(self, rhs: Self) -> SafeMathResult<Self>;
+  |        -------- required by a bound in this associated function
+  = note: this error originates in the derive macro `SafeMathOps` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0599]: no method named `checked_add` found for struct `Foo` in the current scope
+ --> tests/ui/bad_derive_missing_checked_trait_used.rs:4:27
+  |
+4 | #[derive(Debug,Copy,Clone,SafeMathOps)]
+  |                           ^^^^^^^^^^^ method not found in `Foo`
+5 | #[SafeMathOps(add)]
+6 | struct Foo(i32);
+  | ---------- method `checked_add` not found for this struct
+  |
+  = help: items from traits can only be used if the trait is implemented and in scope
+  = note: the following trait defines an item `checked_add`, perhaps you need to implement it:
+          candidate #1: `num_traits::ops::checked::CheckedAdd`
+  = note: this error originates in the derive macro `SafeMathOps` (in Nightly builds, run with -Z macro-backtrace for more info)
