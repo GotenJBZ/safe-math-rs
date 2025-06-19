@@ -95,28 +95,23 @@ macro_rules! impl_safe_math_float {
             impl SafeMathOps for $t {
                 #[inline(always)]
                 fn safe_add(self, rhs: Self) -> SafeMathResult<Self> {
-                    let r = self + rhs;
-                    if r.is_finite() { Ok(r) } else { Err(SafeMathError::Overflow) }
+                    Some(self + rhs).filter(|x| x.is_finite()).ok_or(SafeMathError::Overflow)
                 }
                 #[inline(always)]
                 fn safe_sub(self, rhs: Self) -> SafeMathResult<Self> {
-                    let r = self - rhs;
-                    if r.is_finite() { Ok(r) } else { Err(SafeMathError::Overflow) }
+                    Some(self - rhs).filter(|x| x.is_finite()).ok_or(SafeMathError::Overflow)
                 }
                 #[inline(always)]
                 fn safe_mul(self, rhs: Self) -> SafeMathResult<Self> {
-                    let r = self * rhs;
-                    if r.is_finite() { Ok(r) } else { Err(SafeMathError::Overflow) }
+                    Some(self * rhs).filter(|x| x.is_finite()).ok_or(SafeMathError::Overflow)
                 }
                 #[inline(always)]
                 fn safe_div(self, rhs: Self) -> SafeMathResult<Self> {
-                    let r = self / rhs;
-                    if r.is_finite() { Ok(r) } else { Err(SafeMathError::DivisionByZero) }
+                    Some(self / rhs).filter(|x| x.is_finite()).ok_or(SafeMathError::DivisionByZero)
                 }
                 #[inline(always)]
                 fn safe_rem(self, rhs: Self) -> SafeMathResult<Self> {
-                    let r = self % rhs;
-                    if r.is_finite() { Ok(r) } else { Err(SafeMathError::DivisionByZero) }
+                    Some(self % rhs).filter(|x| x.is_finite()).ok_or(SafeMathError::DivisionByZero)
                 }
             }
         )*
