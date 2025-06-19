@@ -1,5 +1,5 @@
 use num_traits::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
-use safe_math::{safe_math, SafeMathError, SafeMathOps};
+use safe_math::{safe_math, SafeMathOps};
 use std::ops::{Add, Div, Mul, Sub};
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug, Default, SafeMathOps)]
