@@ -88,3 +88,39 @@ macro_rules! impl_safe_math_int {
 }
 
 impl_safe_math_int!(u8, u16, u32, u64, u128, i8, i16, i32, i64, i128, usize, isize);
+
+macro_rules! impl_safe_math_float {
+    ($($t:ty),*) => {
+        $(
+            impl SafeMathOps for $t {
+                #[inline(always)]
+                fn safe_add(self, rhs: Self) -> SafeMathResult<Self> {
+                    let r = self + rhs;
+                    if r.is_finite() { Ok(r) } else { Err(SafeMathError::Overflow) }
+                }
+                #[inline(always)]
+                fn safe_sub(self, rhs: Self) -> SafeMathResult<Self> {
+                    let r = self - rhs;
+                    if r.is_finite() { Ok(r) } else { Err(SafeMathError::Overflow) }
+                }
+                #[inline(always)]
+                fn safe_mul(self, rhs: Self) -> SafeMathResult<Self> {
+                    let r = self * rhs;
+                    if r.is_finite() { Ok(r) } else { Err(SafeMathError::Overflow) }
+                }
+                #[inline(always)]
+                fn safe_div(self, rhs: Self) -> SafeMathResult<Self> {
+                    let r = self / rhs;
+                    if r.is_finite() { Ok(r) } else { Err(SafeMathError::DivisionByZero) }
+                }
+                #[inline(always)]
+                fn safe_rem(self, rhs: Self) -> SafeMathResult<Self> {
+                    let r = self % rhs;
+                    if r.is_finite() { Ok(r) } else { Err(SafeMathError::DivisionByZero) }
+                }
+            }
+        )*
+    };
+}
+
+impl_safe_math_float!(f32, f64);
