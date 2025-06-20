@@ -1,10 +1,10 @@
-use crate::error::{SafeMathError, SafeMathResult};
+use crate::error::SafeMathError;
 use crate::ops::{SafeAdd, SafeDiv, SafeMathOps, SafeMul, SafeRem, SafeSub};
 macro_rules! impl_safe_math_ops {
     ($($op:ident, $trait:ident),*) => {
         $(
             #[inline(always)]
-            pub fn $op<T: $trait>(a: T, b: T) -> SafeMathResult<T> {
+            pub fn $op<T: $trait>(a: T, b: T) -> Result<T, SafeMathError> {
                 a.$op(b)
             }
         )*
@@ -23,7 +23,7 @@ macro_rules! impl_safe_math_int {
             #[diagnostic::do_not_recommend]
             impl SafeAdd for $t {
                 #[inline(always)]
-                fn safe_add(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_add(self, rhs: Self) -> Result<Self, SafeMathError> {
                     self.checked_add(rhs).ok_or(SafeMathError::Overflow)
                 }
             }
@@ -31,7 +31,7 @@ macro_rules! impl_safe_math_int {
             #[diagnostic::do_not_recommend]
             impl SafeSub for $t {
                 #[inline(always)]
-                fn safe_sub(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_sub(self, rhs: Self) -> Result<Self, SafeMathError> {
                     self.checked_sub(rhs).ok_or(SafeMathError::Overflow)
                 }
             }
@@ -39,7 +39,7 @@ macro_rules! impl_safe_math_int {
             #[diagnostic::do_not_recommend]
             impl SafeMul for $t {
                 #[inline(always)]
-                fn safe_mul(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_mul(self, rhs: Self) -> Result<Self, SafeMathError> {
                     self.checked_mul(rhs).ok_or(SafeMathError::Overflow)
                 }
             }
@@ -47,7 +47,7 @@ macro_rules! impl_safe_math_int {
             #[diagnostic::do_not_recommend]
             impl SafeDiv for $t {
                 #[inline(always)]
-                fn safe_div(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_div(self, rhs: Self) -> Result<Self, SafeMathError> {
                     self.checked_div(rhs).ok_or_else(|| {
                         if rhs == 0 {
                             SafeMathError::DivisionByZero
@@ -61,7 +61,7 @@ macro_rules! impl_safe_math_int {
             #[diagnostic::do_not_recommend]
             impl SafeRem for $t {
                 #[inline(always)]
-                fn safe_rem(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_rem(self, rhs: Self) -> Result<Self, SafeMathError> {
                     self.checked_rem(rhs).ok_or(SafeMathError::DivisionByZero)
                 }
             }
@@ -69,23 +69,23 @@ macro_rules! impl_safe_math_int {
             #[diagnostic::do_not_recommend]
             impl SafeMathOps for $t {
                 #[inline(always)]
-                fn safe_add(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_add(self, rhs: Self) -> Result<Self, SafeMathError> {
                     <Self as SafeAdd>::safe_add(self, rhs)
                 }
                 #[inline(always)]
-                fn safe_sub(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_sub(self, rhs: Self) -> Result<Self, SafeMathError> {
                     <Self as SafeSub>::safe_sub(self, rhs)
                 }
                 #[inline(always)]
-                fn safe_mul(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_mul(self, rhs: Self) -> Result<Self, SafeMathError> {
                     <Self as SafeMul>::safe_mul(self, rhs)
                 }
                 #[inline(always)]
-                fn safe_div(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_div(self, rhs: Self) -> Result<Self, SafeMathError> {
                     <Self as SafeDiv>::safe_div(self, rhs)
                 }
                 #[inline(always)]
-                fn safe_rem(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_rem(self, rhs: Self) -> Result<Self, SafeMathError> {
                     <Self as SafeRem>::safe_rem(self, rhs)
                 }
             }
@@ -101,23 +101,23 @@ macro_rules! impl_safe_math_float {
             #[diagnostic::do_not_recommend]
             impl SafeMathOps for $t {
                 #[inline(always)]
-                fn safe_add(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_add(self, rhs: Self) -> Result<Self, SafeMathError> {
                     Some(self + rhs).filter(|x| x.is_finite()).ok_or(SafeMathError::Overflow)
                 }
                 #[inline(always)]
-                fn safe_sub(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_sub(self, rhs: Self) -> Result<Self, SafeMathError> {
                     Some(self - rhs).filter(|x| x.is_finite()).ok_or(SafeMathError::Overflow)
                 }
                 #[inline(always)]
-                fn safe_mul(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_mul(self, rhs: Self) -> Result<Self, SafeMathError> {
                     Some(self * rhs).filter(|x| x.is_finite()).ok_or(SafeMathError::Overflow)
                 }
                 #[inline(always)]
-                fn safe_div(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_div(self, rhs: Self) -> Result<Self, SafeMathError> {
                     Some(self / rhs).filter(|x| x.is_finite()).ok_or(SafeMathError::DivisionByZero)
                 }
                 #[inline(always)]
-                fn safe_rem(self, rhs: Self) -> SafeMathResult<Self> {
+                fn safe_rem(self, rhs: Self) -> Result<Self, SafeMathError> {
                     Some(self % rhs).filter(|x| x.is_finite()).ok_or(SafeMathError::DivisionByZero)
                 }
             }

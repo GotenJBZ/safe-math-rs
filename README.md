@@ -86,11 +86,12 @@ use safe_math::safe_math_block;
 
 fn process_numbers(a: u32, b: u32, c: u32) -> Result<u32, safe_math::SafeMathError> {
    // Only this block uses checked arithmetic
-   safe_math_block!({
+   let result = safe_math_block!({
        let product = a * b;
        let sum = product + c;
        sum / b
-   })
+   });
+   Ok(result)
 }
 ```
 

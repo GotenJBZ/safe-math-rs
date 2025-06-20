@@ -62,7 +62,7 @@
 //!
 //!Enable the `derive` feature to implement safe arithmetic for custom types:
 //!
-//!```rust
+//!```rust,ignore
 //!use safe_math::SafeMathOps;
 //!
 //!#[derive(SafeMathOps)]
@@ -84,11 +84,12 @@
 //!
 //!fn process_numbers(a: u32, b: u32, c: u32) -> Result<u32, safe_math::SafeMathError> {
 //!    // Only this block uses checked arithmetic
-//!    safe_math_block!({
+//!    let result = safe_math_block!({
 //!        let product = a * b;
 //!        let sum = product + c;
 //!        sum / b
-//!    })
+//!    });
+//!    Ok(result)
 //!}
 //!```
 //!
@@ -106,7 +107,7 @@
 //!- **Crate-level macro support**  
 //!  Ability to apply `#[safe_math]` to the entire crate with a single attribute:
 //!
-//!```rust
+//!```rust,ignore
 //!// main.rs or lib.rs
 //!#![safe_math]
 //!
@@ -140,7 +141,7 @@ mod impls;
 mod ops;
 
 // Re-export the most relevant items at the crate root for a clean API.
-pub use error::{SafeMathError, SafeMathResult};
+pub use error::SafeMathError;
 pub use ops::{SafeAdd, SafeDiv, SafeMathOps, SafeMul, SafeRem, SafeSub};
 
 // These helper functions are intentionally re-exported because the macro expands

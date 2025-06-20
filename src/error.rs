@@ -30,6 +30,3 @@ impl std::error::Error for SafeMathError {}
 impl From<SafeMathError> for () {
     fn from(_: SafeMathError) -> Self {}
 }
-
-/// Convenience alias for the `Result` type returned by all safe-math operations.
-pub type SafeMathResult<T> = Result<T, SafeMathError>;
