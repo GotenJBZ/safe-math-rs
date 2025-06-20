@@ -6,16 +6,16 @@
 
 A procedural macro-based library that transforms standard arithmetic operations into their checked equivalents at compile time, preventing overflow, underflow, and division by zero errors.
 
-### Overview
+## Overview
 
 `safe-math` provides:
 - Compile-time transformation of arithmetic operations into checked variants without runtime overhead
 - Comprehensive error handling via `Result` types
 - Support for custom types through derive macros
 
-### Core Functionality
+## Core Functionality
 
-#### Basic Operations
+### Basic Operations
 
 The `#[safe_math]` attribute transforms arithmetic operations into their checked equivalents:
 
@@ -31,7 +31,7 @@ assert_eq!(add(10, 20), Ok(30));
 assert_eq!(add(255, 1), Err(safe_math::SafeMathError::Overflow));
 ```
 
-#### Supported Operations
+### Supported Operations
 
 All basic arithmetic operations are supported:
 - Addition (`+`, `+=`)
@@ -40,7 +40,7 @@ All basic arithmetic operations are supported:
 - Division (`/`, `/=`)
 - Remainder (`%`, `%=`)
 
-#### Error Handling
+### Error Handling
 
 Operations return `SafeMathError` for exceptional cases:
 ```rust
@@ -51,16 +51,16 @@ pub enum SafeMathError {
 }
 ```
 
-#### Type Support
+### Type Support
 
 Built-in support for:
 - Unsigned integers: `u8` through `u128`, `usize`
 - Signed integers: `i8` through `i128`, `isize`
 - Floating point: `f32`, `f64` (with infinity/NaN handling)
 
-### Advanced Usage
+## Advanced Usage
 
-#### Custom Types
+### Custom Types
 
 Enable the `derive` feature to implement safe arithmetic for custom types:
 
@@ -77,7 +77,7 @@ fn calculate(a: MyNumber, b: MyNumber) -> Result<MyNumber, safe_math::SafeMathEr
 }
 ```
 
-#### Block-Level Safety
+### Block-Level Safety
 
 Use `safe_math_block!` to apply checked operations to a specific block of code:
 
@@ -98,7 +98,7 @@ This is useful when you want to:
 - Apply safe arithmetic to specific expression
 - Mix checked and unchecked operations in the same function
 
-### Roadmap
+## Roadmap
 
 Planned upcoming features:
 
@@ -117,7 +117,7 @@ fn demo(a: u32, b: u32) -> Result<u32, safe_math::SafeMathError> {
 }
 ```
 
-### License
+## License
 
 Licensed under either:
 - Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE))
@@ -125,7 +125,7 @@ Licensed under either:
 
 at your option.
 
-### Contributing
+## Contributing
 
 Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in this crate by you shall be dual licensed as above, without any
