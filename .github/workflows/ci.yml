@@ -42,4 +42,12 @@ jobs:
         run: cargo check --examples
 
       - name: Run tests
-        run: cargo test --workspace --all-targets --all-features --quiet 
+        run: cargo test --workspace --all-targets --all-features --quiet
+
+      - name: Install cargo-readme
+        run: cargo install cargo-readme
+
+      - name: Check README.md is up to date
+        run: |
+          cargo readme --no-license > /tmp/README.md
+          diff -q /tmp/README.md README.md
