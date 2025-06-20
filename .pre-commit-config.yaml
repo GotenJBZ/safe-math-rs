@@ -64,3 +64,14 @@ repos:
         types: [rust]
         pass_filenames: false
         always_run: true
+
+      # ---------------------------------------------
+      # Check README.md is up to date
+      # ---------------------------------------------
+      - id: cargo-readme
+        name: "cargo readme"
+        entry: bash -c "cargo readme --no-license > /tmp/README.md && diff -q /tmp/README.md README.md"
+        language: system
+        types: [rust]
+        pass_filenames: false
+        always_run: true
