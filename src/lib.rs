@@ -128,6 +128,7 @@
 //!Unless you explicitly state otherwise, any contribution intentionally submitted
 //!for inclusion in this crate by you shall be dual licensed as above, without any
 //!additional terms or conditions.
+#![forbid(unsafe_code)]
 
 // Re-export the procedural macro so users can simply `use safe_math::safe_math`.
 #[cfg(feature = "derive")]
