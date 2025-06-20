@@ -42,7 +42,7 @@ macro_rules! gen_extra_impls {
                         #[diagnostic::do_not_recommend]
                         impl ::safe_math::#trait_ident for #$name_ident {
                             #[inline(always)]
-                            fn #fn_ident(self, rhs: Self) -> ::safe_math::SafeMathResult<Self> {
+                            fn #fn_ident(self, rhs: Self) -> Result<Self, ::safe_math::SafeMathError> {
                                 self.#method_ident(&rhs).ok_or_else(|| { $err_expr })
                             }
                         }
@@ -52,7 +52,7 @@ macro_rules! gen_extra_impls {
                         #[diagnostic::do_not_recommend]
                         impl ::safe_math::#trait_ident for #$name_ident {
                             #[inline(always)]
-                            fn #fn_ident(self, rhs: Self) -> ::safe_math::SafeMathResult<Self> {
+                            fn #fn_ident(self, rhs: Self) -> Result<Self, ::safe_math::SafeMathError> {
                                 self.#method_ident(&rhs).ok_or({ $err_expr })
                             }
                         }
@@ -187,27 +187,27 @@ fn expand_derive_safe_math_ops(input: DeriveInput) -> syn::Result<TokenStream2> 
         #[diagnostic::do_not_recommend]
         impl ::safe_math::SafeMathOps for #name {
             #[inline(always)]
-            fn safe_add(self, rhs: Self) -> ::safe_math::SafeMathResult<Self> {
+            fn safe_add(self, rhs: Self) -> Result<Self, ::safe_math::SafeMathError> {
                 #add_impl
             }
 
             #[inline(always)]
-            fn safe_sub(self, rhs: Self) -> ::safe_math::SafeMathResult<Self> {
+            fn safe_sub(self, rhs: Self) -> Result<Self, ::safe_math::SafeMathError> {
                 #sub_impl
             }
 
             #[inline(always)]
-            fn safe_mul(self, rhs: Self) -> ::safe_math::SafeMathResult<Self> {
+            fn safe_mul(self, rhs: Self) -> Result<Self, ::safe_math::SafeMathError> {
                 #mul_impl
             }
 
             #[inline(always)]
-            fn safe_div(self, rhs: Self) -> ::safe_math::SafeMathResult<Self> {
+            fn safe_div(self, rhs: Self) -> Result<Self, ::safe_math::SafeMathError> {
                 #div_impl
             }
 
             #[inline(always)]
-            fn safe_rem(self, rhs: Self) -> ::safe_math::SafeMathResult<Self> {
+            fn safe_rem(self, rhs: Self) -> Result<Self, ::safe_math::SafeMathError> {
                 #rem_impl
             }
         }
