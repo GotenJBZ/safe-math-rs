@@ -75,3 +75,14 @@ repos:
         types: [rust]
         pass_filenames: false
         always_run: true
+
+      # ---------------------------------------------
+      # Check YAML formatting with prettier
+      # ---------------------------------------------
+      - id: prettier-yaml
+        name: "prettier --check yaml"
+        entry: bash -c "prettier --check '**/*.{yaml,yml}'"
+        language: system
+        types: [yaml]
+        pass_filenames: false
+        always_run: true
