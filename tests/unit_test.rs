@@ -6,20 +6,20 @@ use common::{test_add_macro, test_div_macro, test_mul_macro, test_sub_macro};
 #[test]
 fn test_safe_math_macro() {
     // Test addition
-    assert_eq!(test_add_macro(10, 20), Ok(30));
-    assert!(test_add_macro(255, 1).is_err()); // Overflow test
+    assert_eq!(test_add_macro(10u8, 20u8), Ok(30u8));
+    assert!(test_add_macro(255u8, 1u8).is_err()); // Overflow test
 
     // Test subtraction
-    assert_eq!(test_sub_macro(30, 10), Ok(20));
-    assert!(test_sub_macro(10, 20).is_err()); // Underflow test
+    assert_eq!(test_sub_macro(30u8, 10u8), Ok(20u8));
+    assert!(test_sub_macro(10u8, 20u8).is_err()); // Underflow test
 
     // Test multiplication
-    assert_eq!(test_mul_macro(5, 6), Ok(30));
-    assert!(test_mul_macro(255, 2).is_err()); // Overflow test
+    assert_eq!(test_mul_macro(5u8, 6u8), Ok(30u8));
+    assert!(test_mul_macro(255u8, 2u8).is_err()); // Overflow test
 
     // Test division
-    assert_eq!(test_div_macro(30, 6), Ok(5));
-    assert!(test_div_macro(10, 0).is_err()); // Division by zero test
+    assert_eq!(test_div_macro(30u8, 6u8), Ok(5u8));
+    assert!(test_div_macro(10u8, 0u8).is_err()); // Division by zero test
 }
 
 #[test]

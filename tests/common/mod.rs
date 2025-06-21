@@ -1,28 +1,27 @@
 #![allow(dead_code)]
 
 use proptest::prelude::*;
-use safe_math::safe_math;
+use safe_math::{safe_math, SafeAdd, SafeDiv, SafeMathOps, SafeMul, SafeRem, SafeSub};
 
 // Basic test operations
-#[safe_math]
-pub fn test_add_macro(a: u8, b: u8) -> Result<u8, ()> {
-    Ok(a + b)
+macro_rules! test_operation_macro {
+    ($(($name:ident, $op:tt, $trait:ident)),*) => {
+        $(
+            #[safe_math]
+            pub fn $name<T: SafeMathOps + $trait>(a: T, b: T) -> Result<T, ()> {
+                Ok(a $op b)
+            }
+        )*
+    };
 }
 
-#[safe_math]
-pub fn test_sub_macro(a: u8, b: u8) -> Result<u8, ()> {
-    Ok(a - b)
-}
-
-#[safe_math]
-pub fn test_mul_macro(a: u8, b: u8) -> Result<u8, ()> {
-    Ok(a * b)
-}
-
-#[safe_math]
-pub fn test_div_macro(a: u8, b: u8) -> Result<u8, ()> {
-    Ok(a / b)
-}
+test_operation_macro!(
+    (test_add_macro, +, SafeAdd),
+    (test_sub_macro, -, SafeSub),
+    (test_mul_macro, *, SafeMul),
+    (test_div_macro, /, SafeDiv),
+    (test_rem_macro, %, SafeRem)
+);
 
 // Expression tree for testing complex arithmetic expressions
 #[derive(Debug)]

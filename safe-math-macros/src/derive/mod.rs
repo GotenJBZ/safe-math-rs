@@ -30,7 +30,7 @@ macro_rules! gen_impl {
 
 // Macro to generate extra_impls TokenStream2 based on checked operations
 macro_rules! gen_extra_impls {
-    ( $checked_ops:expr, $name_ident:ident, $( ($op_lit:literal, $trait:ident, $checked_method:ident, $use_or_else:expr, $err_expr:expr) ),* $(,)? ) => {{
+    ( $checked_ops:expr, $name_ident:ident, $( ($op_lit:literal, $trait:ident, $checked_method:ident, $use_or_else:expr, $err_expr:expr, $checked_trait:expr) ),* $(,)? ) => {{
         let mut impls = TokenStream2::new();
         $(
             if $checked_ops.contains($op_lit) {
@@ -40,7 +40,7 @@ macro_rules! gen_extra_impls {
                 if $use_or_else {
                     impls.extend(quote! {
                         #[diagnostic::do_not_recommend]
-                        impl ::safe_math::#trait_ident for #$name_ident {
+                        impl ::safe_math::#trait_ident for #$name_ident where #$name_ident: $checked_trait {
                             #[inline(always)]
                             fn #fn_ident(self, rhs: Self) -> Result<Self, ::safe_math::SafeMathError> {
                                 self.#method_ident(&rhs).ok_or_else(|| { $err_expr })
@@ -50,7 +50,7 @@ macro_rules! gen_extra_impls {
                 } else {
                     impls.extend(quote! {
                         #[diagnostic::do_not_recommend]
-                        impl ::safe_math::#trait_ident for #$name_ident {
+                        impl ::safe_math::#trait_ident for #$name_ident where #$name_ident: $checked_trait {
                             #[inline(always)]
                             fn #fn_ident(self, rhs: Self) -> Result<Self, ::safe_math::SafeMathError> {
                                 self.#method_ident(&rhs).ok_or({ $err_expr })
@@ -151,35 +151,46 @@ fn expand_derive_safe_math_ops(input: DeriveInput) -> syn::Result<TokenStream2> 
             SafeAdd,
             checked_add,
             false,
-            ::safe_math::SafeMathError::Overflow
+            ::safe_math::SafeMathError::Overflow,
+            ::num_traits::ops::checked::CheckedAdd
         ),
         (
             "sub",
             SafeSub,
             checked_sub,
             false,
-            ::safe_math::SafeMathError::Overflow
+            ::safe_math::SafeMathError::Overflow,
+            ::num_traits::ops::checked::CheckedSub
         ),
         (
             "mul",
             SafeMul,
             checked_mul,
             false,
-            ::safe_math::SafeMathError::Overflow
+            ::safe_math::SafeMathError::Overflow,
+            ::num_traits::ops::checked::CheckedMul
         ),
-        ("div", SafeDiv, checked_div, true, {
-            if rhs == Self::default() {
-                ::safe_math::SafeMathError::DivisionByZero
-            } else {
-                ::safe_math::SafeMathError::Overflow
-            }
-        }),
+        (
+            "div",
+            SafeDiv,
+            checked_div,
+            true,
+            {
+                if rhs == Self::default() {
+                    ::safe_math::SafeMathError::DivisionByZero
+                } else {
+                    ::safe_math::SafeMathError::Overflow
+                }
+            },
+            ::num_traits::ops::checked::CheckedDiv
+        ),
         (
             "rem",
             SafeRem,
             checked_rem,
             false,
-            ::safe_math::SafeMathError::DivisionByZero
+            ::safe_math::SafeMathError::DivisionByZero,
+            ::num_traits::ops::checked::CheckedRem
         ),
     );
 

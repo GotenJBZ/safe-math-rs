@@ -7,6 +7,8 @@ pub enum SafeMathError {
     Overflow,
     /// Attempted to divide (or take remainder) by zero.
     DivisionByZero,
+    /// The operation resulted in an infinite or NaN value (for floating-point types).
+    NonFinite,
 
     #[cfg(feature = "derive")]
     /// The operation is not implemented for the given type.
@@ -18,6 +20,7 @@ impl fmt::Display for SafeMathError {
         match self {
             SafeMathError::Overflow => write!(f, "arithmetic overflow"),
             SafeMathError::DivisionByZero => write!(f, "division by zero"),
+            SafeMathError::NonFinite => write!(f, "non-finite value"),
             #[cfg(feature = "derive")]
             SafeMathError::NotImplemented => write!(f, "operation not implemented"),
         }
