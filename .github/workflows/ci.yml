@@ -22,8 +22,8 @@ jobs:
       - name: Check YAML formatting
         run: prettier --check '**/*.{yaml,yml}'
 
-  rust-quality:
-    name: Rust formatting, lint, deps, README
+  rust-formatting:
+    name: Rust formatting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -31,19 +31,54 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          components: clippy, rustfmt
+          components: rustfmt
       - name: Cache cargo registry + build
         uses: Swatinem/rust-cache@v2
-      - name: Check version consistency
-        run: ./scripts/check_versions.sh
       - name: Check formatting
         run: cargo fmt --all -- --check
+
+  rust-lint:
+    name: Rust linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - name: Cache cargo registry + build
+        uses: Swatinem/rust-cache@v2
       - name: Lint with xclippy (strict)
         run: cargo xclippy
+
+  rust-deps:
+    name: Rust dependencies check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cache cargo registry + build
+        uses: Swatinem/rust-cache@v2
       - name: Install cargo-machete
         run: cargo install cargo-machete
       - name: Check for unused dependencies
         run: cargo machete --skip-target-dir
+
+  rust-readme:
+    name: Rust README check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cache cargo registry + build
+        uses: Swatinem/rust-cache@v2
+      - name: Check version consistency
+        run: ./scripts/check_versions.sh
       - name: Install cargo-readme
         run: cargo install cargo-readme
       - name: Check README.md is up to date
@@ -55,7 +90,7 @@ jobs:
   test:
     name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    needs: [yaml-check, rust-quality]
+    needs: [yaml-check, rust-formatting]
     strategy:
       fail-fast: false
       matrix:
