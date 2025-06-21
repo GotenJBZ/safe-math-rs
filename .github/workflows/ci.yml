@@ -2,52 +2,107 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  rust:
-    name: Rust checks
+  yaml-check:
+    name: Check YAML formatting
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Install prettier
+        run: npm install -g prettier
+      - name: Check YAML formatting
+        run: prettier --check '**/*.{yaml,yml}'
 
+  rust-formatting:
+    name: Rust formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          components: "clippy, rustfmt"
-
+          components: rustfmt
       - name: Cache cargo registry + build
         uses: Swatinem/rust-cache@v2
-
-      - name: Check version consistency
-        run: ./scripts/check_versions.sh
-
       - name: Check formatting
         run: cargo fmt --all -- --check
 
+  rust-lint:
+    name: Rust linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - name: Cache cargo registry + build
+        uses: Swatinem/rust-cache@v2
       - name: Lint with xclippy (strict)
         run: cargo xclippy
 
+  rust-deps:
+    name: Rust dependencies check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cache cargo registry + build
+        uses: Swatinem/rust-cache@v2
       - name: Install cargo-machete
         run: cargo install cargo-machete
-
       - name: Check for unused dependencies
         run: cargo machete --skip-target-dir
 
-      - name: Check examples compilation
-        run: cargo check --examples
-
-      - name: Run tests
-        run: cargo test --workspace --all-targets --all-features --quiet
-
+  rust-readme:
+    name: Rust README check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cache cargo registry + build
+        uses: Swatinem/rust-cache@v2
+      - name: Check version consistency
+        run: ./scripts/check_versions.sh
       - name: Install cargo-readme
         run: cargo install cargo-readme
-
       - name: Check README.md is up to date
         run: |
           cargo readme --no-license > /tmp/README.md
           diff -q /tmp/README.md README.md
+        shell: bash
+
+  test:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    needs: [yaml-check, rust-formatting]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cache cargo registry + build
+        uses: Swatinem/rust-cache@v2
+      - name: Check examples compilation
+        run: cargo check --examples
+      - name: Run tests
+        run: cargo test --workspace --all-targets --all-features --quiet
