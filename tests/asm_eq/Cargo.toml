@@ -1,0 +1,15 @@
+[package]
+name = "safe-math-asm-tests"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+test = true
+doctest = false
+
+[dependencies]
+
+[dev-dependencies]
+safe-math = { path = "../.." }

@@ -300,6 +300,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "safe-math-asm-tests"
+version = "0.1.0"
+dependencies = [
+ "safe-math",
+]
+
+[[package]]
 name = "safe-math-macros"
 version = "0.1.0"
 dependencies = [
