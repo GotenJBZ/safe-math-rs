@@ -11,6 +11,7 @@ repos:
         files: Cargo\.toml$
         pass_filenames: false
         always_run: true
+        fail_fast: true
 
       # ---------------------------------------------
       # Rust formatting: ensure code is formatted with rustfmt.
@@ -21,6 +22,7 @@ repos:
         language: system
         types: [rust]
         always_run: true
+        fail_fast: true
 
       # ---------------------------------------------
       # Rust linter: fail commit if clippy reports warnings.
@@ -31,6 +33,7 @@ repos:
         language: system
         types: [rust]
         always_run: true
+        fail_fast: true
 
       # ---------------------------------------------
       # Run unit tests on every commit
@@ -42,6 +45,7 @@ repos:
         types: [rust]
         pass_filenames: false
         always_run: true
+        fail_fast: true
 
       # ---------------------------------------------
       # Check examples compilation
@@ -53,6 +57,7 @@ repos:
         types: [rust]
         pass_filenames: false
         always_run: true
+        fail_fast: true
 
       # ---------------------------------------------
       # Check for unused dependencies
@@ -64,6 +69,7 @@ repos:
         types: [rust]
         pass_filenames: false
         always_run: true
+        fail_fast: true
 
       # ---------------------------------------------
       # Check README.md is up to date
@@ -75,6 +81,7 @@ repos:
         types: [rust]
         pass_filenames: false
         always_run: true
+        fail_fast: true
 
       # ---------------------------------------------
       # Check YAML formatting with prettier
@@ -86,3 +93,4 @@ repos:
         types: [yaml]
         pass_filenames: false
         always_run: true
+        fail_fast: true
