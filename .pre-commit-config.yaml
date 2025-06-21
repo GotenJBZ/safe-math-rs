@@ -40,7 +40,7 @@ repos:
       # ---------------------------------------------
       - id: cargo-test
         name: "cargo test"
-        entry: bash -c "cargo test --workspace --quiet"
+        entry: bash -c "cargo nextest run -r --workspace --all-targets --all-features"
         language: system
         types: [rust]
         pass_filenames: false

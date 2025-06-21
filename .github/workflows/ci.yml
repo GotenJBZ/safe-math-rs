@@ -105,4 +105,4 @@ jobs:
       - name: Check examples compilation
         run: cargo check --examples
       - name: Run tests
-        run: cargo test --workspace --all-targets --all-features --quiet
+        run: cargo nextest run -r --workspace --all-targets --all-features
