@@ -18,13 +18,9 @@ pub const NUMERIC_TYPES: [&str; 12] = [
 ];
 
 /// Generate a test case for comparing assembly output
-fn generate_asm_test(op: &str, name: &str, checked_op: &str, num_type: &str) -> String {
-    let manifest_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
-    let workspace_path = std::path::Path::new(&manifest_dir)
-        .join("../..")
-        .canonicalize()
-        .unwrap();
-    let workspace_path_str = workspace_path.to_string_lossy().replace('\\', "/");
+fn generate_asm_test(op: &str, name: &str, checked_op: &str, num_type: &str) -> String {    
+    // Calculate relative path from OUT_DIR to workspace root
+    let relative_path = "../../../../../../";
 
     let cargo_toml_content = format!(
         r#"
@@ -42,7 +38,7 @@ fn generate_asm_test(op: &str, name: &str, checked_op: &str, num_type: &str) -> 
         [dependencies]
         safe-math = {{ path = "{}" }}
     "#,
-        workspace_path_str
+        relative_path
     );
 
     format!(
