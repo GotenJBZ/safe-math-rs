@@ -102,7 +102,9 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: Cache cargo registry + build
         uses: Swatinem/rust-cache@v2
+      - name: Install cargo-nextest
+        run: cargo install cargo-nextest
       - name: Check examples compilation
         run: cargo check --examples
       - name: Run tests
-        run: cargo test --workspace --all-targets --all-features --quiet
+        run: cargo nextest run -r --workspace --all-targets --all-features
