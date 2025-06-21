@@ -8,8 +8,13 @@ on:
 
 jobs:
   rust:
-    name: Rust checks
-    runs-on: ubuntu-latest
+    name: Rust checks on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - name: Checkout code
@@ -18,13 +23,15 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          components: "clippy, rustfmt"
+          components: clippy, rustfmt
 
       - name: Cache cargo registry + build
         uses: Swatinem/rust-cache@v2
 
       - name: Check version consistency
+        if: runner.os == 'Linux'
         run: ./scripts/check_versions.sh
+        shell: bash
 
       - name: Check formatting
         run: cargo fmt --all -- --check
@@ -33,9 +40,11 @@ jobs:
         run: cargo xclippy
 
       - name: Install cargo-machete
+        if: runner.os == 'Linux'
         run: cargo install cargo-machete
 
       - name: Check for unused dependencies
+        if: runner.os == 'Linux'
         run: cargo machete --skip-target-dir
 
       - name: Check examples compilation
@@ -45,9 +54,12 @@ jobs:
         run: cargo test --workspace --all-targets --all-features --quiet
 
       - name: Install cargo-readme
+        if: runner.os == 'Linux'
         run: cargo install cargo-readme
 
       - name: Check README.md is up to date
+        if: runner.os == 'Linux'
         run: |
           cargo readme --no-license > /tmp/README.md
           diff -q /tmp/README.md README.md
+        shell: bash
