@@ -1,7 +1,7 @@
 # safe_math
 
 [![Crates.io](https://img.shields.io/crates/v/safe-math.svg)](https://crates.io/crates/safe-math)
-[![Documentation](https://docs.rs/safe-math/badge.svg)](https://docs.rs/safe-math)
+[![Documentation](https://docs.rs/safe_math/badge.svg)](https://docs.rs/safe_math)
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue.svg)](README.md)
 
 A procedural macro-based library that transforms standard arithmetic operations into their checked equivalents at compile time, preventing overflow, underflow, and division by zero errors.
