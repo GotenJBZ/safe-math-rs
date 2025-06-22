@@ -3,7 +3,7 @@ members = ["safe-math-macros", "tests/generated"]
 
 [package]
 name = "safe-math"
-version = "0.1.0"
+version = "2.0.0-beta"
 edition = "2021"
 description = "Safe arithmetic using a procedural macro. Write normal math expressions with automatic overflow checks. No panics, no boilerplate."
 readme = "README.md"
@@ -13,7 +13,13 @@ homepage = "https://github.com/GotenJBZ/safe-math-rs"
 documentation = "https://docs.rs/safe-math"
 categories = ["mathematics","development-tools::procedural-macro-helpers","security"]
 rust-version = "1.78.0"
-include = ["src/*"]
+include = [
+    "src/**",
+    "Cargo.toml",
+    "README.md",
+    "LICENSE-*"
+]
+
 
 [features]
 derive = ["safe-math-macros/derive"]
@@ -29,7 +35,7 @@ required-features = ["derive"]
 
 [dependencies]
 num-traits = { version = "0.2"}
-safe-math-macros = { version = "0.1.0", path = "./safe-math-macros" }
+safe-math-macros = { version = "2.0.0-beta", path = "./safe-math-macros" }
 
 
 [dev-dependencies]
