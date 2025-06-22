@@ -1,6 +1,6 @@
 [package]
 name = "safe-math-macros"
-version = "0.1.0" # ensure it matches the version in the root Cargo.toml
+version = "2.0.0-beta" # ensure it matches the version in the root Cargo.toml
 edition = "2021"
 description = "Procedural macros for overflow-safe arithmetic operations"
 readme = "README.md"
