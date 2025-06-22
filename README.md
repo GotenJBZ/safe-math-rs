@@ -1,4 +1,4 @@
-# safe-math
+# safe_math
 
 [![Crates.io](https://img.shields.io/crates/v/safe-math.svg)](https://crates.io/crates/safe-math)
 [![Documentation](https://docs.rs/safe-math/badge.svg)](https://docs.rs/safe-math)

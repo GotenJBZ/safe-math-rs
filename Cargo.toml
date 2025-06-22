@@ -2,7 +2,7 @@
 members = ["safe-math-macros", "tests/generated"]
 
 [package]
-name = "safe-math"
+name = "safe_math"
 version = "2.0.0-beta"
 edition = "2021"
 description = "Safe arithmetic using a procedural macro. Write normal math expressions with automatic overflow checks. No panics, no boilerplate."
