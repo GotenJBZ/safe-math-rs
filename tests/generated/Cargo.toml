@@ -12,7 +12,7 @@ doctest = false
 [dependencies]
 
 [dev-dependencies]
-safe-math = { path = "../.." }
+safe_math = { path = "../.." }
 rand = "0.9.1"
 
 [build-dependencies]
