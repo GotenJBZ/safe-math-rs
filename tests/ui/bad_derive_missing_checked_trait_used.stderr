@@ -58,8 +58,11 @@ note: required by a bound in `safe_math::safe_add`
   --> src/impls.rs
    |
    | / impl_safe_math_ops!(
-   | |     safe_add, SafeAdd, safe_sub, SafeSub, safe_mul, SafeMul, safe_div, SafeDiv, safe_rem, SafeRem
+   | |     safe_add => {
    | |     -------- required by a bound in this function
+   | |         trait: SafeAdd,
+   | |         desc: "addition with overflow"
+...  |
    | | );
    | |_^ required by this bound in `safe_add`
    = note: this error originates in the attribute macro `safe_math` which comes from the expansion of the macro `impl_safe_math_ops` (in Nightly builds, run with -Z macro-backtrace for more info)

@@ -45,6 +45,7 @@
 //!pub enum SafeMathError {
 //!    Overflow,           // Result exceeds type bounds
 //!    DivisionByZero,    // Division or remainder by zero
+//!    InfiniteOrNaN,    // Result is infinite or NaN (floating-point types)
 //!    NotImplemented,    // Missing trait implementation (derive feature)
 //!}
 //!```
@@ -74,6 +75,13 @@
 //!    Ok(a + b)
 //!}
 //!```
+//!
+//!**Note:** For the derive to work, your type must implement both the standard arithmetic traits
+//!(like `Add`, `Sub`, `Mul`, `Div`, `Rem`) and their checked counterparts (like `CheckedAdd`,
+//!`CheckedSub`, `CheckedMul`, `CheckedDiv`, `CheckedRem`) from the `num-traits` crate.
+//!
+//!This requirement exists because without knowing what a type represents, it's impossible to
+//!determine what operations are safe to perform or what constitutes a "checked" operation.
 //!
 //!## Block-Level Safety
 //!
@@ -130,21 +138,21 @@
 //!for inclusion in this crate by you shall be dual licensed as above, without any
 //!additional terms or conditions.
 #![forbid(unsafe_code)]
+#![deny(missing_docs)]
 
 // Re-export the procedural macro so users can simply `use safe_math::safe_math`.
 #[cfg(feature = "derive")]
 pub use safe_math_macros::SafeMathOps;
 pub use safe_math_macros::{safe_math, safe_math_block};
 
-// Internal modules
-mod error;
-mod impls;
-mod ops;
-
 // Re-export the most relevant items at the crate root for a clean API.
 pub use error::SafeMathError;
 pub use ops::{SafeAdd, SafeDiv, SafeMathOps, SafeMul, SafeRem, SafeSub};
 
-// These helper functions are intentionally re-exported because the macro expands
-// to them, and users may want to call them directly in generic contexts.
+// These helper functions are intentionally re-exported because the macro expands to them
 pub use impls::{safe_add, safe_div, safe_mul, safe_rem, safe_sub};
+
+// Internal modules
+mod error;
+mod impls;
+mod ops;

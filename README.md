@@ -47,6 +47,7 @@ Operations return `SafeMathError` for exceptional cases:
 pub enum SafeMathError {
    Overflow,           // Result exceeds type bounds
    DivisionByZero,    // Division or remainder by zero
+   InfiniteOrNaN,    // Result is infinite or NaN (floating-point types)
    NotImplemented,    // Missing trait implementation (derive feature)
 }
 ```
@@ -76,6 +77,13 @@ fn calculate(a: MyNumber, b: MyNumber) -> Result<MyNumber, safe_math::SafeMathEr
    Ok(a + b)
 }
 ```
+
+**Note:** For the derive to work, your type must implement both the standard arithmetic traits
+(like `Add`, `Sub`, `Mul`, `Div`, `Rem`) and their checked counterparts (like `CheckedAdd`,
+`CheckedSub`, `CheckedMul`, `CheckedDiv`, `CheckedRem`) from the `num-traits` crate.
+
+This requirement exists because without knowing what a type represents, it's impossible to
+determine what operations are safe to perform or what constitutes a "checked" operation.
 
 ### Block-Level Safety
 

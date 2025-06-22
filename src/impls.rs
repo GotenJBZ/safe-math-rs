@@ -1,10 +1,51 @@
+//! Implementation of safe arithmetic operations for built-in numeric types.
+//!
+//! This module provides the core implementations of safe arithmetic operations
+//! for all supported numeric types. It includes:
+//!
+//! - Helper functions used by the `#[safe_math]` macro
+//! - Trait implementations for integer types using checked operations
+//! - Specialized implementations for floating-point types
+
 use crate::error::SafeMathError;
 use crate::ops::{SafeAdd, SafeDiv, SafeMathOps, SafeMul, SafeRem, SafeSub};
 use sealed::{IsSafeAdd, IsSafeDiv, IsSafeMul, IsSafeRem, IsSafeSub};
 
+macro_rules! doc_for_trait {
+    (SafeDiv) => {
+        "`Ok(result)` on success, `Err(SafeMathError::DivisionByZero)` on error."
+    };
+    (SafeRem) => {
+        "`Ok(result)` on success, `Err(SafeMathError::DivisionByZero)` on error."
+    };
+    ($trait:ident) => {
+        "`Ok(result)` on success, `Err(SafeMathError::Overflow)` on error."
+    };
+}
+
 macro_rules! impl_safe_math_ops {
-    ($($op:ident, $trait:ident),*) => {
+    (
         $(
+            $op:ident => {
+                trait: $trait:ident,
+                desc: $desc:expr
+            }
+        ),* $(,)?
+    ) => {
+        $(
+            #[doc = concat!("Performs safe ", $desc," checking.")]
+            ///
+            /// Used internally by the `#[safe_math]` macro during expansion.
+            /// This function delegates to the appropriate trait method.
+            ///
+            /// # Arguments
+            ///
+            /// * `a` - First operand.
+            /// * `b` - Second operand.
+            ///
+            /// # Returns
+            ///
+            #[doc = doc_for_trait!($trait)]
             #[inline(always)]
             pub fn $op<T: $trait>(a: T, b: T) -> Result<T, SafeMathError> {
                 a.$op(b)
@@ -14,7 +55,26 @@ macro_rules! impl_safe_math_ops {
 }
 
 impl_safe_math_ops!(
-    safe_add, SafeAdd, safe_sub, SafeSub, safe_mul, SafeMul, safe_div, SafeDiv, safe_rem, SafeRem
+    safe_add => {
+        trait: SafeAdd,
+        desc: "addition with overflow"
+    },
+    safe_sub => {
+        trait: SafeSub,
+        desc: "subtraction with underflow"
+    },
+    safe_mul => {
+        trait: SafeMul,
+        desc: "multiplication with overflow"
+    },
+    safe_div => {
+        trait: SafeDiv,
+        desc: "division with division-by-zero"
+    },
+    safe_rem => {
+        trait: SafeRem,
+        desc: "remainder with division-by-zero"
+    }
 );
 
 macro_rules! impl_safe_ops {
@@ -86,19 +146,45 @@ macro_rules! impl_safe_float_ops {
         $(
             #[diagnostic::do_not_recommend]
             impl $trait for f32 {
+                #[doc = concat!("Performs safe ", stringify!($method), " for f32.")]
+                ///
+                /// Used internally by the `#[safe_math]` macro during expansion.
+                /// Checks for finite results to prevent infinity/NaN propagation.
+                ///
+                /// # Arguments
+                ///
+                /// * `self` - First operand.
+                /// * `rhs` - Second operand.
+                ///
+                /// # Returns
+                ///
+                /// `Ok(result)` on success, `Err(SafeMathError::InfiniteOrNaN)` on error.
                 #[inline(always)]
                 fn $method(self, rhs: Self) -> Result<Self, SafeMathError> {
                     let res = self $op rhs;
-                    res.is_finite().then(|| res).ok_or(SafeMathError::NonFinite)
+                    res.is_finite().then(|| res).ok_or(SafeMathError::InfiniteOrNaN)
                 }
             }
 
             #[diagnostic::do_not_recommend]
             impl $trait for f64 {
+                #[doc = concat!("Performs safe ", stringify!($method), " for f64.")]
+                ///
+                /// Used internally by the `#[safe_math]` macro during expansion.
+                /// Checks for finite results to prevent infinity/NaN propagation.
+                ///
+                /// # Arguments
+                ///
+                /// * `self` - First operand.
+                /// * `rhs` - Second operand.
+                ///
+                /// # Returns
+                ///
+                /// `Ok(result)` on success, `Err(SafeMathError::InfiniteOrNaN)` on error.
                 #[inline(always)]
                 fn $method(self, rhs: Self) -> Result<Self, SafeMathError> {
                     let res = self $op rhs;
-                    res.is_finite().then(|| res).ok_or(SafeMathError::NonFinite)
+                    res.is_finite().then(|| res).ok_or(SafeMathError::InfiniteOrNaN)
                 }
             }
         )*
@@ -114,7 +200,6 @@ impl_safe_float_ops!(
 );
 
 #[diagnostic::do_not_recommend]
-
 impl<T> SafeMathOps for T
 where
     T: SafeAdd + SafeSub + SafeMul + SafeDiv + SafeRem + Copy,
