@@ -2,8 +2,13 @@ error[E0277]: the trait bound `Foo: CheckedAdd` is not satisfied
  --> tests/ui/bad_derive_missing_checked_trait_unused.rs:4:27
   |
 4 | #[derive(Debug,Copy,Clone,SafeMathOps)]
-  |                           ^^^^^^^^^^^ the trait `CheckedAdd` is not implemented for `Foo`
+  |                           ^^^^^^^^^^^ unsatisfied trait bound
   |
+help: the trait `CheckedAdd` is not implemented for `Foo`
+ --> tests/ui/bad_derive_missing_checked_trait_unused.rs:6:1
+  |
+6 | struct Foo(i32);
+  | ^^^^^^^^^^
   = help: the following other types implement trait `CheckedAdd`:
             i128
             i16
@@ -14,15 +19,19 @@ error[E0277]: the trait bound `Foo: CheckedAdd` is not satisfied
             u128
             u16
           and $N others
-  = help: see issue #48214
   = note: this error originates in the derive macro `SafeMathOps` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: Type `Foo` cannot perform safe addition.
  --> tests/ui/bad_derive_missing_checked_trait_unused.rs:4:27
   |
 4 | #[derive(Debug,Copy,Clone,SafeMathOps)]
-  |                           ^^^^^^^^^^^ the trait `SafeAdd` is not implemented for `Foo`
+  |                           ^^^^^^^^^^^ unsatisfied trait bound
   |
+help: the trait `SafeAdd` is not implemented for `Foo`
+ --> tests/ui/bad_derive_missing_checked_trait_unused.rs:6:1
+  |
+6 | struct Foo(i32);
+  | ^^^^^^^^^^
   = note: Add `add` to `#[SafeMathOps(...)]` when deriving `SafeMathOps`.
   = note: this error originates in the derive macro `SafeMathOps` (in Nightly builds, run with -Z macro-backtrace for more info)
 
@@ -35,7 +44,7 @@ error[E0599]: no method named `checked_add` found for struct `Foo` in the curren
 6 | struct Foo(i32);
   | ---------- method `checked_add` not found for this struct
   |
- ::: $CARGO/num-traits-0.2.19/src/ops/checked.rs
+ ::: $CARGO/num-traits-$VERSION/src/ops/checked.rs
   |
   |     fn checked_add(&self, v: &Self) -> Option<Self>;
   |        ----------- the method is available for `Foo` here

@@ -49,7 +49,7 @@ pub fn safe_math(_attr: TokenStream, item: TokenStream) -> TokenStream {
     }
 
     let new_block = MathRewriter.fold_block(orig_block);
-    input_fn.block = Box::new(new_block);
+    *input_fn.block = new_block;
     TokenStream::from(quote! { #input_fn })
 }
 
