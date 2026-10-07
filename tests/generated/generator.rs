@@ -1,7 +1,7 @@
 /// This module contains the logic for generating random arithmetic expression tests.
 /// It creates pairs of equivalent expressions using both regular operators and
 /// their checked counterparts to verify the safe_math macro's behavior.
-use rand::Rng;
+use rand::RngExt;
 
 /// Number of test cases to generate per type
 pub const NUM_TEST_CASES: usize = 50;
@@ -209,7 +209,7 @@ pub fn generate_test_cases() -> String {
 #[cfg(test)]
 use safe_math::{safe_math, safe_math_block};
 #[cfg(test)]
-use rand::Rng;
+use rand::RngExt;
 
 // This file is auto-generated. Do not edit manually.
 // Each test verifies that the safe_math macro produces identical results
